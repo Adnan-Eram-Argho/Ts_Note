@@ -1,0 +1,1850 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeScript স্টাডি নোট (বাংলা)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e5e7eb;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #1e293b;
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Navigation Styles */
+        nav {
+            background-color: #334155;
+            padding: 0.75rem 1rem;
+            position: sticky;
+            top: 90px;
+            z-index: 999;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 0.75rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            scrollbar-width: thin;
+        }
+
+        .nav-menu::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .nav-menu::-webkit-scrollbar-thumb {
+            background-color: #94a3b8;
+            border-radius: 3px;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background-color: #475569;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background-color: #64748b;
+        }
+
+        .nav-link.active {
+            background-color: #3b82f6;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            top: 45px;
+            right: 20px;
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            z-index: 1001;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: #2563eb;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Topic Section Card */
+        .topic-section {
+            background-color: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            scroll-margin-top: 160px;
+        }
+
+        body.dark-mode .topic-section {
+            background-color: #2d3748;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .topic-section h2 {
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid #3b82f6;
+            font-size: 1.75rem;
+        }
+
+        body.dark-mode .topic-section h2 {
+            color: #93c5fd;
+            border-bottom-color: #60a5fa;
+        }
+
+        .topic-section h3 {
+            color: #334155;
+            margin: 1.5rem 0 1rem 0;
+            font-size: 1.25rem;
+        }
+
+        body.dark-mode .topic-section h3 {
+            color: #cbd5e1;
+        }
+
+        /* Content Subsections */
+        .subsection {
+            margin-bottom: 1.5rem;
+        }
+
+        .subsection-title {
+            color: #3b82f6;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background-color: #eff6ff;
+            border-radius: 4px;
+        }
+
+        body.dark-mode .subsection-title {
+            color: #60a5fa;
+            background-color: #1e3a5f;
+        }
+
+        .subsection-content {
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+        }
+
+        /* Code Block */
+        pre {
+            background-color: #0f172a;
+            color: #e5e7eb;
+            padding: 1.25rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            border-left: 4px solid #3b82f6;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            background-color: #e2e8f0;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        body.dark-mode code {
+            background-color: #475569;
+            color: #f1f5f9;
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            border-radius: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Bullet Points */
+        ul, ol {
+            margin: 0.5rem 0 0.5rem 1.5rem;
+        }
+
+        li {
+            margin: 0.5rem 0;
+        }
+
+        /* Best Practices Box */
+        .best-practices {
+            background-color: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem 1.25rem;
+            margin-top: 1.5rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        body.dark-mode .best-practices {
+            background-color: #422006;
+            border-left-color: #fbbf24;
+        }
+
+        .best-practices h4 {
+            color: #92400e;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        body.dark-mode .best-practices h4 {
+            color: #fcd34d;
+        }
+
+        .best-practices ul {
+            margin: 0;
+            padding-left: 1.25rem;
+        }
+
+        .best-practices li {
+            margin: 0.5rem 0;
+            color: #78350f;
+        }
+
+        body.dark-mode .best-practices li {
+            color: #fef3c7;
+        }
+
+        /* Scroll to Top Button */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #3b82f6;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .scroll-top:hover {
+            background-color: #2563eb;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(59, 130, 246, 0.5);
+        }
+
+        .scroll-top.show {
+            display: flex;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1e293b;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        footer p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.25rem;
+            }
+
+            header p {
+                font-size: 0.85rem;
+            }
+
+            nav {
+                top: 60px;
+            }
+
+            .theme-toggle {
+                top: 75px;
+                right: 15px;
+                padding: 0.4rem 0.8rem;
+                font-size: 0.85rem;
+            }
+
+            .topic-section {
+                padding: 1.5rem;
+            }
+
+            .topic-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .topic-section h3 {
+                font-size: 1.1rem;
+            }
+
+            pre {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            .scroll-top {
+                width: 45px;
+                height: 45px;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Highlight for current section */
+        .topic-section:target {
+            animation: highlight 1.5s ease-in-out;
+        }
+
+        @keyframes highlight {
+            0% {
+                box-shadow: 0 0 0 4px #3b82f6;
+            }
+            100% {
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        body.dark-mode .topic-section:target {
+            animation: highlight-dark 1.5s ease-in-out;
+        }
+
+        @keyframes highlight-dark {
+            0% {
+                box-shadow: 0 0 0 4px #60a5fa;
+            }
+            100% {
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>TypeScript স্টাডি নোট (বাংলা)</h1>
+        <p>TypeScript শেখার সহজ বাংলা গাইড - PDF থেকে সংগৃহীত</p>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-menu">
+            <a href="#typescript-intro" class="nav-link">TypeScript পরিচিতি</a>
+            <a href="#primitive-types" class="nav-link">Primitive Types</a>
+            <a href="#non-primitive-types" class="nav-link">Non-Primitive Types</a>
+            <a href="#object-literal" class="nav-link">Object Literal</a>
+            <a href="#functions" class="nav-link">Functions</a>
+            <a href="#interfaces" class="nav-link">Interfaces</a>
+            <a href="#classes" class="nav-link">Classes</a>
+            <a href="#rest-spread" class="nav-link">Rest vs Spread</a>
+            <a href="#destructuring" class="nav-link">Destructuring</a>
+            <a href="#type-alias" class="nav-link">Type Alias</a>
+            <a href="#union-intersection" class="nav-link">Union & Intersection</a>
+            <a href="#modern-operators" class="nav-link">Modern Operators</a>
+            <a href="#nullable-types" class="nav-link">Nullable Types</a>
+        </div>
+    </nav>
+
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" onclick="toggleTheme()">🌙 ডার্ক মোড</button>
+
+    <!-- Main Content -->
+    <main>
+
+        <!-- 1. TypeScript পরিচিতি -->
+        <section id="typescript-intro" class="topic-section">
+            <h2>TypeScript পরিচিতি</h2>
+
+            <h3>ধারণা (Concept)</h3>
+            <div class="subsection">
+                <span class="subsection-title">TypeScript কী?</span>
+                <div class="subsection-content">
+                    <p>TypeScript হল JavaScript-এর একটি সুপিরিয়র ভার্সন যা Microsoft দ্বারা তৈরি করা হয়েছে। এটি মূলত JavaScript-এর কাজের ধারণার ওপর ভিত্তি করে আরও শক্তিশালী ও নির্ভুল যাগ্য করার জন্য ডিজাইন করা হয়েছে, বিশেষ করে বড় আকারের অ্যাপ্লিকেশনের জন্য।</p>
+                </div>
+            </div>
+
+            <h3>কেন TypeScript ব্যবহার করব?</h3>
+            <div class="subsection">
+                <div class="subsection-content">
+                    <ul>
+                        <li><strong>স্ট্যাটিক টাইপিং (Static Typing):</strong> কোড লেখার সময় ভেরিয়েবল, ফাংশন প্যারামিটার এবং রিটার্ন ভ্যালুর টাইপ (যেমন: string, number, boolean) নির্দিষ্ট করার অনুমতি দেয়।</li>
+                        <li><strong>কম্পাইল করার আগেই টাইপ-সম্পর্কিত ত্রুটিগুলো ধরা পড়ে, ফলে রানটাইম ত্রুটি কমে যায়।</strong></li>
+                        <li><strong>উন্নত এডিটর সাপোর্ট:</strong> টাইপ থেকে কারেণ উন্নত কোড অটো-কমপ্লিশন, ইন্টেলিসেন্স এবং রিফ্যাক্টরিং ক্ষমতা প্রদান করে।</li>
+                        <li><strong>ডেভেলপারদের উৎপাদনশীলতা বৃদ্ধি পায়।</strong></li>
+                        <li><strong>OOP সুবিধা:</strong> ক্লাস, ইন্টারফেস, ইনহেরিট্যান্স ইত্যাদির মাধ্যমে শক্তিশালী OOP বিশেষ্য সম্পন্ন করে।</li>
+                        <li><strong>বড় কোডে বসপরিচালনা করা এবং রক্ষণাবেক্ষণ করা সহজ হয়।</strong></li>
+                        <li><strong>জাভাস্ক্রিপ্ট সুপারসেট:</strong> যেকোনো বৈধ জাভাস্ক্রিপ্ট কোডও বৈধ TypeScript কোড। এটি বিদ্যমান JS প্রোজেক্ট সহজেই যুক্ত করা যায়।</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>সিনট্যাক্স (Syntax)</h3>
+            <pre><code>// TypeScript ভেরিয়েবল ডিক্লেয়ারেশন
+let userName: string = "Anisul Islam";
+let age: number = 25;
+let isActive: boolean = true;
+
+// ফাংশনে টাইপ ডিফাইনেশন
+function add(a: number, b: number): number {
+    return a + b;
+}
+
+// অবজেক্ট টাইপ
+let user: { name: string; age: number } = {
+    name: "Rahim",
+    age: 30
+};</code></pre>
+
+            <div class="best-practices">
+                <h4>💡 বেস্ট প্র্যাকটিস / টিপস</h4>
+                <ul>
+                    <li>ছোট প্রোজেক্টের জন্য TypeScript ব্যবহার শুরু করুন, ধীরে ধীরে বড় প্রোজেক্টে যান।</li>
+                    <li>সবসময় ভেরিয়েবল ডিক্লেয়ারেশনের সময় Explicit Type (যেমন: string) দেওয়া ভালো, বিশেষ করে যেখানে ভ্যালু পরে অ্যাসাইন করা হবে।</li>
+                    <li>any টাইপ ব্যবহার করা থেকে বিরত থাকুন।</li>
+                    <li>প্রথমে strict mode অন করে শুরু করুন।</li>
+                    <li>এডিটর হিসেবে VS Code ব্যবহার করুন, এতে সবচেয়ে ভালো TypeScript সাপোর্ট পাওয়া যায়।</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 2. Primitive Data Types -->
+        <section id="primitive-types" class="topic-section">
+            <h2>Primitive Data Types</h2>
+
+            <h3>ধারণা (Concept)</h3>
+            <div class="subsection">
+                <span class="subsection-title">Primitive Data Types কী?</span>
+                <div class="subsection-content">
+                    <p>Primitive Data Types হল TypeScript (এবং JavaScript)-এর সবচেয়ে মৌলিক বা বেসিক ডেটা টাইপ। এগুলো হল একদম লো-লেভেল ডেটা ভ্যালু, যেগুলো মেমরিতে সরাসরি মান (Value) হিসেবে সংরক্ষত থাকে এবং এগুলোর কোনো নিজস্ব মেথড (Method) বা প্রপার্টি পরিবর্তন করা যায় না (Immutable)।</p>
+                    <p>TypeScript-এ প্রধানত ৫টি মূল প্রিমিটিভ টাইপ বিশেষভাবে ব্যবহৃত হয়:</p>
+                    <ol>
+                        <li><strong>string</strong> (টেক্সট বা লেখা)</li>
+                        <li><strong>number</strong> (সংখ্যা)</li>
+                        <li><strong>boolean</strong> (সত্য বামিথ্যা)</li>
+                        <li><strong>null</strong> (ইচ্ছাকৃত ভাবেখালি রাখা)</li>
+                        <li><strong>undefined</strong> (ভ্যালু সেট করা হয়নি)</li>
+                    </ol>
+                    <p>(এছাড়াও <strong>symbol</strong> এবং <strong>bigint</strong> নামে আরও দুটি টাইপ আছে যা অ্যাডভান্সড কেস লাগে)</p>
+                </div>
+            </div>
+
+            <h3>সিনট্যাক্স (Syntax)</h3>
+            <pre><code>// 1. String: টেক্সট ডেটার জন্য
+let userName: string = "Anisul Islam";
+
+// 2. Number: পূর্ণ সংখ্যা বা দশমিক সংখ্যার জন্য
+let age: number = 25;
+let price: number = 99.99;
+
+// 3. Boolean: শুধুমাত্র true অথবা false এর জন্য
+let isAdmin: boolean = true;
+let isLoggedIn: boolean = false;
+
+// 4. Undefined: ভেরিয়েবল ডিক্লেয়ার করা হয়েছিকিন্তু ভ্যালু দেওয়া হয়নি
+let x: undefined = undefined;
+let futureValue; // বাই ডিফল্ট এর টাইপ এবং ভ্যালু 'undefined'
+
+// 5. Null: যেখানে আমরা ইচ্ছাকৃতভাবে কোনো ভ্যালু খালি রাখতেচাই
+let emptyValue: null = null;</code></pre>
+
+            <h3>কোড ব্যাখ্যা (Code Explanation)</h3>
+            <div class="subsection">
+                <div class="subsection-content">
+                    <ul>
+                        <li><strong>let userName: string = "...":</strong> এখানে <code>: string</code> দিয়ে আমরা TypeScript-কে বলে দিচ্ছি যে <code>userName</code> ভেরিয়েবলে শুধু টেক্সট রাখা যাবে। সংখ্যা বা অন্যকিছু রাখলে এরর দেবে।</li>
+                        <li><strong>let age: number:</strong> TypeScript-এ int বা float আলাদা করে লিখতে হয় না। সব ধরনের সংখ্যার জন্যই <code>number</code> টাইপ ব্যবহৃত হয়।</li>
+                        <li><strong>boolean:</strong> লজিক্যাল অপারেশনের জন্য (হাঁ / না) এটি ব্যবহৃত হয়।</li>
+                        <li><strong>undefined vs null:</strong>
+                            <ul>
+                                <li><strong>Undefined:</strong> ভেরিয়েবলটি তৈরি আছে, কিন্তু এখনো কোনো মান বা ভ্যালু অ্যাসাইন করা হয়নি (অটোমেটিক হতে পারে)।</li>
+                                <li><strong>Null:</strong> ভেরিয়েবলটি খালি, এবং এটা আমরা নিজেই সেট করেছি (ইচ্ছাকৃত অনুপস্থিত)।</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="best-practices">
+                <h4>💡 বেস্ট প্র্যাকটিস / টিপস</h4>
+                <ul>
+                    <li>সবসময় ভেরিয়েবল ডিক্লেয়ারেশনের সময় Explicit Type (যেমন: <code>string</code>) দেওয়া ভালো অভ্যাস, বিশেষ করে যেখানে ভ্যালু পরে অ্যাসাইন করা হবে।</li>
+                    <li><strong>any</strong> টাইপ ব্যবহার করা থেকে বিরত থাকুন। প্রিমিটিভ টাইপ ব্যবহার করলে কোড অনেক বেশি নির্দিষ্ট পদ থাকে এবং ডিবাগ করা সহজ হয়।</li>
+                    <li>যেখানে কোনো ভ্যালু নেই সেখানে <code>null</code> ব্যবহার করুন, <code>undefined</code> নয়।</li>
+                    <li>যেখানে ভ্যালু নিশ্চিত না সেখানে Union Type ব্যবহার করুন।</li>
+                    <li>Type inference সুবিধা সত্ত্বেও শুরুতে explicit type দিয়ে শিখুন।</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 3. Non-Primitive Data Types -->
+        <section id="non-primitive-types" class="topic-section">
+            <h2>Non-Primitive Data Types</h2>
+
+            <h3>ধারণা (Concept)</h3>
+            <div class="subsection">
+                <span class="subsection-title">Non-Primitive Types কী?</span>
+                <div class="subsection-content">
+                    <p>Non-Primitive Types (যাদেরকে অনেক সময় Reference Types - ও বলা হয়) হল এমন ডেটা টাইপ যা একাধিক মান (Value) বা জটিল ডেটা স্ট্রাকচার ধারণ করতে পারে। Primitive টাইপের মতো এরা সরাসরি মেমরিতে ভ্যালু হিসেবে থাকে না, বরং মেমরির একটি লোকেশনের রেফারেন্স (Reference) হিসেবে থাকে।</p>
+                    <p>TypeScript-এ প্রধান Non-Primitive টাইপগুলো হল:</p>
+                    <ol>
+                        <li><strong>Array</strong> (তালিকা)</li>
+                        <li><strong>Object</strong> (অবজেক্ট বা প্লেইন অল্টারনেটিভ স্ট্রাকচার)</li>
+                        <li><strong>Tuple</strong> (ফিক্সড লেন্থ অ্যারে - TypeScript স্পেশাল)</li>
+                        <li><strong>Enum</strong> (নেমড কনস্ট্যান্টস - TypeScript স্পেশাল)</li>
+                    </ol>
+                </div>
+            </div>
+
+            <h3>সিনট্যাক্স (Syntax)</h3>
+            <pre><code>// 1. Array: একই ধরনের অনেকগুলো ডেটার তালিকা
+let numbers: number[] = [10, 20, 30, 40];
+let friends: string[] = ["Rahim", "Karim", "Jabbar"];
+
+// 2. Object: কী-ভ্যালু পেয়ার (Key-Value Pair) ডেটা
+let user: {
+    name: string;
+    age: number;
+    isAdmin: boolean
+} = {
+    name: "Shakib",
+    age: 30,
+    isAdmin: true
+};
+
+// 3. Tuple: নির্দিষ্ট ক্রম এবং টাইপের অ্যারে (TypeScript Special)
+// এখানে প্রথমটি অবশ্যই string এবং দ্বিতীয়টি number হতে হবে
+let role: [string, number] = ["Manager", 101];
+
+// 4. Enum: নির্দিষ্ট কিছু কনস্ট্যান্ট ভ্যালুর সেট (TypeScript Special)
+enum Status {
+    Pending,
+    Approved,
+    Rejected
+}
+let currentStatus: Status = Status.Approved;</code></pre>
+
+            <h3>কোড ব্যাখ্যা (Code Explanation)</h3>
+            <div class="subsection">
+                <div class="subsection-content">
+                    <ul>
+                        <li><strong>Array (type[]):</strong>
+                            <ul>
+                                <li><code>number[]</code> মানে এই অ্যারেতে শুধু সংখ্যা রাখা যাবে।</li>
+                                <li><code>string[]</code> মানে শুধু টেক্সট রাখা যাবে।</li>
+                                <li>অন্য টাইপ মিক্স করলে TypeScript এরর দেবে।</li>
+                            </ul>
+                        </li>
+                        <li><strong>Object ({ key: type }):</strong>
+                            <ul>
+                                <li>এখানে আমরা সরাসরি ভেরিয়েবলের সাথেই অবজেক্টের স্ট্রাকচার বেল দিয়েছি। <code>user</code> অবজেক্টে <code>name</code> হতে হবে স্ট্রিং এবং <code>age</code> হতে হবে নাম্বার।</li>
+                            </ul>
+                        </li>
+                        <li><strong>Tuple ([type, type]):</strong>
+                            <ul>
+                                <li>এটি অ্যারের মতোই, কিন্তু এর সাইজ এবং টাইপ ফিক্সড থাকে।</li>
+                                <li><code>["Manager", 101]</code> সঠিক, কিন্তু <code>[101, "Manager"]</code> ভুল (কারণ অর্ডার মিলে নাই)।</li>
+                            </ul>
+                        </li>
+                        <li><strong>Enum:</strong>
+                            <ul>
+                                <li><code>Status.Approved</code> ব্যবহার করলে কোড বুঝতে সুবিধা হয়। আমাদের মনে রাখতে হয় না যে Approved মানে 0 নাকি 1। এটি কোডে হিউম্যান-রিডেবল করে।</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="best-practices">
+                <h4>💡 বেস্ট প্র্যাকটিস / টিপস</h4>
+                <ul>
+                    <li><strong>Object-এর ক্ষেত্রে:</strong> একই স্ট্রাকচার অনেক জায়গায় ব্যবহার করতে হলে Inline Type এর পরিবর্তে <strong>Interface</strong> বা <strong>Type Alias</strong> ব্যবহার করা উচিত। এতে কোড ক্লিন থাকে।</li>
+                    <li><strong>Array-এর ক্ষেত্রে:</strong> যদি মিক্সড ডেটা টাইপ রাখার দরকার হয় (যা সাধারণত এড়ানো উচিত), তবে <code>(string | number)[]</code> বা Union Type ব্যবহার করুন।</li>
+                    <li><strong>Tuple:</strong> যখন আপনি জানেন যে অ্যারেতে ঠিক কয়টি উপাদান থাকবে এবং তাদের টাইপ কী হবে (যেমন: Coordinates [x, y]), তখন Tuple ব্যবহার করা সবচেয়ে অপশন।</li>
+                    <li><strong>Enum:</strong> যেখানে নির্দিষ্ট কিছু অপশন বা স্ট্যাটাস আছে, সেখানে Enum ব্যবহার করুন।</li>
+                    <li>যখনই সম্ভব স্ট্রাকচার আগে ডিফাইন করে তারপর অবজেক্ট তৈরি করুন।</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 4. Object Literal & Optional Properties -->
+        <section id="object-literal" class="topic-section">
+            <h2>Object Literal & Optional Properties</h2>
+
+            <h3>ধারণা (Concept)</h3>
+            <div class="subsection">
+                <span class="subsection-title">Object Literal</span>
+                <div class="subsection-content">
+                    <p>এটি হল TypeScript-এ অবজেক্ট তৈরি করার সবচেয়ে সাধারণ এবং সহজ পদ্ধতি। এখানে আমরা সরাসরি <code>{ key: value }</code> ফরম্যাট ব্যবহার করে ডেটা ডিফাইন করি। TypeScript-এ অবজেক্ট লিটারাল লেখার সময় ভেরিয়েবলের সাথেই তার টাইপ (Shape) বেল দেওয়া যায়।</p>
+                </div>
+
+                <span class="subsection-title" style="margin-top: 1rem;">Optional Type (?)</span>
+                <div class="subsection-content">
+                    <p>অনেক সময় অবজেক্টের সব প্রপার্টি আমাদের দরকার হয় না। কোনো প্রপার্টি থাকতেও পারে, আবার নাও থাকতে পারে - এমন বুঝাতে আমরা সেই প্রপার্টির নামের শেষ একটি প্রশ্নবোধক চিহ্ন <code>?</code> ব্যবহার করি। একে Optional Property বলে।</p>
+                </div>
+            </div>
+
+            <h3>সিনট্যাক্স (Syntax)</h3>
+            <pre><code>// 1. সাধারণ Object Literal (Type সাজাসুজ বেল দেওয়া)
+let student: {
+    name: "Mehedi Hasan";  // this will not change (value => type)
+    id: number;
+    phone?: string;        // এটি Optional Property
+    address?: string       // এটিও Optional Property
+} = {
+    name: "Mehedi Hasan",
+    id: 2204
+    // phone এবং address নাদিলেও কোড রান করবে না, কারণ এগুলো Optional
+};
+
+// 2. Optional Property সহ একটি অবজেক্ট
+let employee: {
+    name: string;
+    salary: number;
+    isActive?: boolean
+} = {
+    name: "Rahim",
+    salary: 50000,
+    isActive: true  // এখানে আমরা Optional ভ্যালু দিয়েছি
+};
+
+// 3. Optional Chaining ব্যবহার করে এক্সেস করা
+console.log(student.phone?.toUpperCase());</code></pre>
+
+            <h3>কোড ব্যাখ্যা (Code Explanation)</h3>
+            <div class="subsection">
+                <div class="subsection-content">
+                    <ol>
+                        <li><strong>let student: { ... }:</strong> আমরা <code>student</code> ভেরিয়েবলের জন্য সরাসরি একটি টাইপ কাঠামো (Structure) তৈরি করেছি। একে Inline Type Definition বা অবজেক্ট লিটারাল টাইপ বলে।</li>
+                        <li><strong>phone?: string:</strong> <code>phone</code>-এর পর <code>?</code> থাকার মানে হলা, অবজেক্ট তৈরি করার সময় <code>phone</code> প্রপার্টি না দিলেও TypeScript কোনো এরর (Error) দেবে না।</li>
+                        <li><strong>student.phone?.toUpperCase():</strong> একে বলা হয় Optional Chaining। যদি <code>student.phone</code> আনডিফাইনড (undefined) হয়, তাহলে কোড ক্র্যাশ করবে না, বরং <code>undefined</code> রিটার্ন করবে। আর যদি ভ্যালু থাকে, তবেই <code>toUpperCase()</code> কাজ করবে।</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="best-practices">
+                <h4>💡 বেস্ট প্র্যাকটিস / টিপস</h4>
+                <ul>
+                    <li><strong>Inline Type vs Interface:</strong> ছোট এবং সিম্পল অবজেক্টের জন্য (যেগুলো একবারই ব্যবহার হবে) Object Literal টাইপ ব্যবহার করা ঠিক আছে। তবে যদি একই স্ট্রাকচার অনেক জায়গায় ব্যবহার করতে হয়, তবে অবশ্যই <strong>interface</strong> বা <strong>type alias</strong> ব্যবহার করা উচিত।</li>
+                    <li><strong>Optional Use:</strong> যখন আপনি API থেকে ডেটা আনেন এবং জানেন না যে সব ফিল্ড আসবে কিনা, তখন Optional Type (<code>?</code>) ব্যবহার করা সবচেয়ে নিরাপদ।</li>
+                    <li>যেখানে আপনি নিশ্চিত যে প্রপার্টি থাকবেই, সেখানে Optional ব্যবহার করবেন না। এতে কোডের সুরক্ষা বাড়ে।</li>
+                    <li>Optional Property এক্সেস করার সময় সবসময় Optional Chaining (<code>?.</code>) ব্যবহার করুন। এতে Runtime Error এড়ানো যায়।</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 5. Functions in TypeScript -->
+        <section id="functions" class="topic-section">
+            <h2>Functions in TypeScript</h2>
+
+            <h3>ধারণা (Concept)</h3>
+            <div class="subsection">
+                <span class="subsection-title">Functions কী?</span>
+                <div class="subsection-content">
+                    <p>জাভাস্ক্রিপ্টের মতো টাইপে ও Function হল কোডের একটি ব্লক যা নির্দিষ্ট কাজ করে। তবে TypeScript-এর বিশেষত্ব হল — আপনি ফাংশনের প্যারামিটার (Input) এবং রিটার্ন ভ্যালু (Output)-এর টাইপ আগে থেকেই নির্দিষ্ট করে দিতে পারেন। এতে ভুল ডেটা পাস করার কোনো সুযোগ থাকে না।</p>
+                </div>
+            </div>
+
+            <h3>সিনট্যাক্স ও ভ্যারিয়েশন (Syntax & Variations)</h3>
+            <pre><code>// ১. Basic Function (প্যারামিটার এবং রিটার্ন টাইপ সহ)
+function add(a: number, b: number): number {
+    return a + b;
+}
+
+// ২. Arrow Function
+const multiply = (x: number, y: number): number => {
+    return x * y;
+};
+
+// ৩. Optional Parameters (?): প্যারামিটার নাদিলেও চলবে
+// 'greet' ফাংশনে 'name' বাধ্যতামূলক, কিন্তু 'message' ঐচ্ছিক
+function greet(name: string, message?: string): string {
+    if (message) {
+        return `Hello ${name}, ${message}`;
+    }
+    return `Hello ${name}`;
+}
+
+// ৪. Default Parameters (=): ভ্যালু নাদিলে ডিফল্ট ভ্যালু ব্যবহার হবে
+function power(base: number, exponent: number = 2): number {
+    return base ** exponent;
+}
+
+// ৫. Rest Parameters (...): আনলিমিটেড প্যারামিটার রিসিভ করা
+// অনেকগুলো সংখ্যা যোগ করার জন্য
+function sumAll(...numbers: number[]): number {
+    return numbers.reduce((total, num) => total + num, 0);
+}
+
+// ৬. Void Return Type: যখন ফাংশন কিছু রিটার্ন করে না
+function logMessage(msg: string): void {
+    console.log(msg);
+    // এখানে return করার কিছু নাই
+}</code></pre>
+
+            <h3>কোড ব্যাখ্যা (Code Explanation)</h3>
+            <div class="subsection">
+                <div class="subsection-content">
+                    <ol>
+                        <li><strong>: number (Return Type):</strong> <code>add</code> এবং <code>multiply</code> ফাংশনের শেষে <code>: number</code> লেখা আছে। এর মানে এই ফাংশনটি কাজ শেষ অবশ্যই একটি সংখ্যা ফরত দেবে। স্ট্রিং বা অন্যকিছু রিটার্ন করলে এরর দেখাবে।</li>
+                        <li><strong>Optional Parameter (?):</strong> <code>message?: string</code> এর মানে হলা এই প্যারামিটারটি দিলেও হবে, না দিলেও হবে।
+                            <ul>
+                                <li>নোট: Optional parameter সবসময় শেষ রাখতে হয়।</li>
+                            </ul>
+                        </li>
+                        <li><strong>Default Parameter (= 2):</strong> <code>exponent: number = 2</code> মানে হলা যদি কেউ দ্বিতীয় প্যারামিটার নাদেয়, তবে অটোমেটিকভাবে 2 ধরে নেওয়া হবে।</li>
+                        <li><strong>Rest Parameter (...numbers):</strong> যখন আমরা জানি না ইউজার কয়টি প্যারামিটার পাঠাবে (১টা হতে পারে আবার ১০০টাও হতে পারে), তখন <code>...</code> ব্যবহার করি। এটি সব ইনপুটকে একটি Array-তে রূপান্তর করে দেয়।</li>
+                        <li><strong>void:</strong> যদি কোনো ফাংশন return স্টেটমেন্ট ব্যবহার না করে (যেমন শুধু কনসোল প্রিন্ট করে), তবে তার রিটার্ন টাইপ হয় <code>void</code>।</li>
+                    </ol>
+                </div>
+            </div>
+
+            <h3>Function Signature (ফাংশন টাইপ ভেরিয়েবল)</h3>
+            <pre><code>// একটি ভেরিয়েবলের টাইপ হিসেবেও ফাংশনের স্ট্রাকচার বেল দিতে পারেন
+// যার ২টা ইনপুট এবং রিটার্ন টাইপ নাম্বার
+let myCalculation: (x: number, y: number) => number;
+
+myCalculation = (a, b) => a + b;  // ঠিক আছে
+// myCalculation = (a) => a;  // এরর! কারণ ২টা প্যারামিটার নাই</code></pre>
+
+            <div class="best-practices">
+                <h4>💡 বেস্ট প্র্যাকটিস / টিপস</h4>
+                <ul>
+                    <li>সবসময় প্যারামিটার এবং রিটার্ন টাইপ উল্লেখ করুন। যদিও TS অনেক সময় অনুমান (Inference) করতে পারে, তবুও লিখে দেওয়া ভালো অভ্যাস।</li>
+                    <li>যদি ফাংশন কিছু রিটার্ন না করে, তবে স্পষ্ট ভাবে <code>: void</code> ব্যবহার করুন।</li>
+                    <li>৩টির বেশি প্যারামিটার হলে সবগুলোকে আলাদা আলাদা না পাঠিয়ে একটি Object বা Interface হিসেবে পাঠানো ভালো। এতে কোড ক্লিন থাকে।</li>
+                    <li>Rest parameter এবং default parameter একসাথে ব্যবহার করার সময় সাবধান থাকুন। Rest parameter সবসময় শেষে রাখুন।</li>
+                    <li>Arrow function এবং সাধারণ function এর মধ্যে পার্থক্য বুঝুন, বিশেষ করে <code>this</code> কীওয়ার্ডের ক্ষেত্রে।</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 6. Interfaces -->
+        <section id="interfaces" class="topic-section">
+            <h2>Interfaces</h2>
+
+            <h3>ধারণা (Concept)</h3>
+            <div class="subsection">
+                <span class="subsection-title">Interfaces কী?</span>
+                <div class="subsection-content">
+                    <p>Interface হল একটি স্ট্রাকচারাল কন্ট্রাক্ট যা অবজেক্টের আকার ও গঠন বানাতে ব্যবহৃত হয়। এটি ডেটা অবজেক্ট কী কী বিশেষ্য (properties) থাকে এবং সেগুলোর টাইপ কী হবে, তা নির্দিষ্ট করে দেয়।</p>
+                    <p>Interface মূলত অবজেক্টের "চুক্তি" (contract) বা "নকশা" (blueprint) হিসেবে কাজ করে। কোনো অবজেক্ট Interface ফলো করলে সেই Interface-এ থাকা সব প্রপার্টি অবশ্যই থাকতে হবে (যদি না সেগুলো Optional হয়)।</p>
+                </div>
+            </div>
+
+            <h3>সিনট্যাক্স (Syntax)</h3>
+            <pre><code>// ১. মৌলিক Interface
+interface Person {
+    firstName: string;
+    lastName: string;
+    age: number;
+    isStudent?: boolean;  // ঐচ্ছিক প্রপার্টি
+}
+
+function printPersonInfo(person: Person): void {
+    console.log(`নাম: ${person.firstName} ${person.lastName}, বয়স: ${person.age}`);
+}
+
+let userOne: Person = {
+    firstName: "আলম",
+    lastName: "খান",
+    age: 25
+};
+
+printPersonInfo(userOne);
+
+// ২. Interface এ Method থাকতে পারে
+interface User {
+    firstName: string;
+    lastName: string;
+    age: number;
+
+    // মেথড ১: নিজের প্রপার্টি এক্সেস করতে 'this' লাগে
+    getFullName(): string;
+
+    // মেথড ২: ভ্যালু আপডেট করা
+    updateAge(newAge: number): void;
+}
+
+// ৩. অবজেক্ট তৈরি করা
+const myUser: User = {
+    firstName: "Sakib",
+    lastName: "Al Hasan",
+    age: 34,
+
+    // মেথড ১: নিজের প্রপার্টি এক্সেস করতে 'this' ব্যবহার
+    getFullName() {
+        return `${this.firstName} ${this.lastName}`;
+    },
+
+    // মেথড ২: ভ্যালু আপডেট করা
+    updateAge(newAge: number) {
+        this.age = newAge;
+        console.log(`Age updated to: ${this.age}`);
+    }
+};
+
+// ৪. মেথড কল করা (Call methods)
+console.log(myUser.getFullName());  // Output: Sakib Al Hasan
+myUser.updateAge(35);  // Output: Age updated to: 35</code></pre>
+
+            <h3>কোড ব্যাখ্যা (Code Explanation)</h3>
+            <div class="subsection">
+                <div class="subsection-content">
+                    <ol>
+                        <li><strong>interface Person { ... }:</strong> <code>interface</code> কীওয়ার্ড দিয়ে আমরা একটি Interface ডিফাইন করছি। এটি শুধুমাত্র টাইপ স্ট্রাকচার, কোনো রিয়েল কোড নয়।</li>
+                        <li><strong>isStudent?: boolean:</strong> <code>?</code> চিহ্ন বোঝাচ্ছে যে এই প্রপার্টিটি Optional। অবজেক্ট তৈরির সময় এটি না দিলেও চলবে।</li>
+                        <li><strong>getFullName(): string:</strong> Interface আমাদের বেলে দিয়েছে যে <code>getFullName</code> নামে একটি ফাংশন থাকবে যা অবশ্যই একটি string রিটার্ন করবে।</li>
+                        <li><strong>getFullName() { ... }:</strong> এটি হল অবজেক্টের ভেতরের ফাংশন বা মেথড। আধুনিক সিনট্যাক্সে <code>function</code> কিওয়ার্ডটি লিখতে হয় না।</li>
+                        <li><strong>this Keyword:</strong> অবজেক্টের মেথড থেকে যদি আপনি ওই একই অবজেক্টের অন্য কোনো প্রপার্টি (যেমন <code>firstName</code>) ব্যবহার করতে চান, তবে অবশ্যই <code>this.</code> ব্যবহার করতে হবে। <code>this.firstName</code> মানে হলা "এই অবজেক্টের firstName"।</li>
+                        <li><strong>updateAge(newAge: number):</strong> এই মেথডটি প্যারামিটার হিসেবে একটি সংখ্যা নেবে এবং অবজেক্টের age আপডেট করে দেবে। যেহতু এটি কিছু রিটার্ন করে না, তাই Interface এর টাইপ <code>void</code> দেওয়া হয়েছে।</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="best-practices">
+                <h4>💡 বেস্ট প্র্যাকটিস / টিপস</h4>
+                <ul>
+                    <li><strong>Arrow Function ও this:</strong> অবজেক্টের মেথড হিসেবে Arrow Function (<code>=></code>) ব্যবহার করার সময় সতর্ক থাকবেন। কারণ Arrow Function-এর নিজস্ব <code>this</code> স্কোপ থাকে না। সাধারণ মেথড সিনট্যাক্স (উপরে যেভাবে দেখানো হয়েছে) ব্যবহার করাই নিরাপদ।</li>
+                    <li><strong>Type Safety:</strong> মেথডের প্যারামিটার এবং রিটার্ন টাইপ সবসময় স্পষ্ট ভাবে Interface বা টাইপের মধ্যে উল্লেখ করা উচিত।</li>
+                    <li><strong>Readonly Properties:</strong> যেই প্রপার্টি পরিবর্তন করা যাবে না, সেগুলোকে <code>readonly</code> কীওয়ার্ড দিয়ে ডিক্লেয়ার করুন।</li>
+                    <li><strong>Extending Interfaces:</strong> একটি Interface অন্য Interface থেকে প্রপার্টি বা মেথড ইনহেরিট করতে চাইলে <code>extends</code> কীওয়ার্ড ব্যবহার করুন।</li>
+                    <li>একই ধরনের অবজেক্টের জন্য সবসময় Interface ব্যবহার করা উচিত। এতে কোড আরও পুনঃব্যবহারযোগ্য হয়।</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 7. Classes -->
+        <section id="classes" class="topic-section">
+            <h2>Classes</h2>
+
+            <h3>ধারণা (Concept)</h3>
+            <div class="subsection">
+                <span class="subsection-title">Classes কী?</span>
+                <div class="subsection-content">
+                    <p>TypeScript ক্লাসগুলো ES6 ক্লাস সিনট্যাক্সের উপর ভিত্তি করে তৈরি হয়েছে এবং এতে টাইপের উপর অতিরিক্ত টাইপ সুবিধা রয়েছে। ক্লাস হল অবজেক্ট তৈরির একটি টেমপ্লেট বা ব্লুপ্রিন্ট।</p>
+                    <p>ক্লাসের প্রধান উপাদানগুলো হল:</p>
+                    <ul>
+                        <li><strong>Properties (প্রপার্টি):</strong> ক্লাসের ভেরিয়েবল বা ডেটা</li>
+                        <li><strong>Constructor:</strong> অবজেক্ট তৈরির সময় ইনিশিয়ালাইজ করার মেথড</li>
+                        <li><strong>Methods:</strong> ক্লাসের ফাংশন বা আচরণ</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>সিনট্যাক্স (Syntax)</h3>
+            <pre><code>// ১. মৌলিক ক্লাস ও কনস্ট্রাক্টর
+class Animal {
+    // প্রপার্টি
+    private name: string;  // এটি শুধুমাত্র ক্লাসের ভেতর অ্যাক্সেসযোগ্য
+
+    // কনস্ট্রাক্টর
+    constructor(theName: string) {
+        this.name = theName;
+    }
+
+    // মেথড
+    move(distanceInMeters: number = 0) {
+        console.log(`${this.name} ${distanceInMeters} মিটার দূরত্ব অতিক্রম করেছে।`);
+    }
+}
+
+let dog = new Animal("ডগ");
+dog.move(10);  // ডগ 10 মিটার দূরত্ব অতিক্রম করেছে।
+// console.log(dog.name);  // ত্রুটি: 'name' হল private
+
+// ২. ইনহেরিট্যান্স (Inheritance)
+// extends কীওয়ার্ড ব্যবহার করে একটি ক্লাস অন্য একটি ক্লাসের বিশেষ্য এবং পদ্ধতি উত্তরাধিকার সূত্রে পেতে পারে।
+
+class Dog extends Animal {
+    bark() {
+        console.log('ঘউ ঘউ!');
+    }
+
+    // বেস ক্লাসের মেথড ওভাররাইড
+    move(distanceInMeters = 5) {
+        console.log("দৌড়াচ্ছে...");
+        super.move(distanceInMeters);  // বেস ক্লাসের move মেথড কল করা
+    }
+}
+
+let labrador = new Dog("ল্যাব্রাডর");
+labrador.bark();
+labrador.move();</code></pre>
+
+            <h3>কোড ব্যাখ্যা (Code Explanation)</h3>
+            <div class="subsection">
+                <div class="subsection-content">
+                    <ol>
+                        <li><strong>class Animal { ... }:</strong> <code>class</code> কীওয়ার্ড দিয়ে আমরা একটি ক্লাস ডিফাইন করছি। এটি অবজেক্ট তৈরির একটি টেমপ্লেট।</li>
+                        <li><strong>private name: string:</strong> <code>private</code> অ্যাক্সেস মডিফায়ার বোঝাচ্ছে যে <code>name</code> প্রপার্টি শুধুমাত্র এই ক্লাসের ভেতর অ্যাক্সেসযোগ্য। বাইরে থেকে এক্সেস করা যাবে না।</li>
+                        <li><strong>constructor(theName: string):</strong> কনস্ট্রাক্টর হল একটি স্পেশাল মেথড যা নতুন অবজেক্ট তৈরির সময় অটোমেটিক কল হয়।</li>
+                        <li><strong>this.name = theName:</strong> প্যারামিটার হিসেবে আসা ভ্যালুকে ক্লাসের প্রপার্টি হিসেবে সেট করা হচ্ছে।</li>
+                        <li><strong>class Dog extends Animal:</strong> <code>Dog</code> ক্লাস <code>Animal</code> ক্লাস থেকে সব প্রপার্টি এবং মেথড ইনহেরিট করছে।</li>
+                        <li><strong>super.move(distanceInMeters):</strong> <code>super</code> কীওয়ার্ড দিয়ে প্যারেন্ট ক্লাসের মেথড কল করা হচ্ছে।</li>
+                    </ol>
+                </div>
+            </div>
+
+            <h3>অ্যাক্সেস মডিফায়ার (Access Modifiers)</h3>
+            <pre><code>class Person {
+    public name: string;      // সব জায়গায় অ্যাক্সেসযোগ্য (ডিফল্ট)
+    private age: number;      // শুধুমাত্র ক্লাসের ভেতর অ্যাক্সেসযোগ্য
+    protected email: string;  // ক্লাস এবং চাইল্ড ক্লাসে অ্যাক্সেসযোগ্য
+
+    constructor(name: string, age: number, email: string) {
+        this.name = name;
+        this.age = age;
+        this.email = email;
+    }
+}</code></pre>
+
+            <div class="best-practices">
+                <h4>💡 বেস্ট প্র্যাকটিস / টিপস</h4>
+                <ul>
+                    <li><strong>প্রপার্টি ডিক্লেয়ারেশন:</strong> সবসময় ক্লাসের প্রপার্টিগুলো উপরে ডিক্লেয়ার করে টাইপ দিন। এতে কোড পরিষ্কার থাকে।</li>
+                    <li><strong>Access Modifiers:</strong> প্রয়োজন অনুযায়ী <code>private</code>, <code>protected</code>, এবং <code>public</code> ব্যবহার করুন। ডিফল্টভাবে সব <code>public</code>, তবে সুরক্ষার জন্য যা বাইরে অ্যাক্সেস দরকার না, সেগুলোকে <code>private</code> রাখুন।</li>
+                    <li><strong>Inheritance:</strong> খুব বেশি ইনহেরিট্যান্স চেইন তৈরি করবেন না। সাধারণত ২-৩ লেভেলের বেশি না হওয়াই ভালো।</li>
+                    <li><strong>Composition vs Inheritance:</strong> সবসময় ইনহেরিট্যান্স না ব্যবহার করে কখনও কখনও Composition (এক অবজেক্ট অন্য অবজেক্ট ব্যবহার করা) বেটার হতে পারে।</li>
+                    <li><strong>Constructor Parameters:</strong> TypeScript এ আপনি কনস্ট্রাক্টরের প্যারামিটারে সরাসরি অ্যাক্সেস মডিফায়ার ব্যবহার করতে পারেন।</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 8. Rest vs Spread Operator -->
+        <section id="rest-spread" class="topic-section">
+            <h2>Rest (...) vs Spread (...) Operator</h2>
+
+            <h3>ধারণা (Concept)</h3>
+            <div class="subsection">
+                <span class="subsection-title">এগুলো কী এবং পাথ্য কী?</span>
+                <div class="subsection-content">
+                    <p>TypeScript-এ <code>...</code> (তিনটি ডট) চিহ্নটি প্রেক্ষাপটের ওপর ভিত্তি করে দুই ভাবে কাজ করে:</p>
+
+                    <p><strong>১. Rest Operator (বাটি একত্র করা):</strong></p>
+                    <ul>
+                        <li>এটি ফাংশনের প্যারামিটার হিসেবে বা Destructuring-এর সময় ব্যবহৃত হয়।</li>
+                        <li>এর কাজ হল ছড়িয়ে থাকা অনেকগুলো আইটেমকে একটি মতো করে Array বা Object-এর মধ্যে প্যাক (Pack) করা।</li>
+                        <li>সহজ কথায়: "বাটি যা কিছু আছে, সব আমাকে দাও।"</li>
+                    </ul>
+
+                    <p><strong>২. Spread Operator (ছড়িয়ে দেওয়া):</strong></p>
+                    <ul>
+                        <li>এটি কোনো Array বা Object-এর ভ্যালুগুলোকে একসাথে আলাদা আলাদা ভ্যালু হিসেবে ছড়িয়ে দেয় (Unpack)।</li>
+                        <li>এর কাজ হল একটি অ্যারে বা অবজেক্টকে কপি করা বা দুটির ভ্যালু মার্জ (Merge) করা।</li>
+                        <li>সহজ কথায়: "প্যাকেট খুলে সব উপাদান ছড়িয়ে দাও।"</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>সিনট্যাক্স (Syntax)</h3>
+            <pre><code>// --- A. Rest Operator (একত্র করা) ---
+
+// ১. ফাংশন Rest: অনির্দিষ্ট সংখ্যক ইনপুট নেওয়া
+function sumAll(message: string, ...numbers: number[]): void {
+    const total = numbers.reduce((acc, num) => acc + num, 0);
+    console.log(`${message}: ${total}`);
+}
+
+sumAll("Total is", 10, 20, 30, 40);
+// এখানে 10, 20, 30, 40 মিলে একটি অ্যারে [10, 20, 30, 40] হয়ে গেছে।
+
+// ২. Destructuring-এ Rest: বাটি প্রপার্টি আলাদা করা
+const myLaptop = {
+    brand: "Apple",
+    model: "MacBook Pro",
+    year: 2023,
+    price: 2000
+};
+
+// 'brand' আলাদা ভেরিয়েবলে যাবে, বাকি সব 'others'-এর মধ্যে অবজেক্ট হিসেবে থাকবে
+const { brand, ...others } = myLaptop;
+console.log(brand);   // "Apple"
+console.log(others); // { model: "MacBook Pro", year: 2023, price: 2000 }
+
+// --- B. Spread Operator (ছড়িয়ে দেওয়া) ---
+
+// ১. Array Spread: অ্যারে কপি বা মার্জ করা
+const teamA = ["Rahim", "Karim"];
+const teamB = ["Jabbar", "Salam"];
+
+// teamA এবং teamB-এর সব সদস্যকে নতুন অ্যারেতে ছড়িয়ে দেওয়া হলে
+const fullTeam = [...teamA, ...teamB, "Barkat"];
+console.log(fullTeam); // ["Rahim", "Karim", "Jabbar", "Salam", "Barkat"]
+
+// ২. Object Spread: অবজেক্ট কপি বা আপডেট করা
+const userInfo = {
+    name: "Sakib",
+    role: "Admin"
+};
+
+// পুরানো সব প্রপার্টি কপি করে নতুন একটি প্রপার্টি যোগ করা হলে
+const updatedUser = {
+    ...userInfo,    // name: "Sakib", role: "Admin" চলে আসবে
+    active: true    // নতুন প্রপার্টি
+};</code></pre>
+
+            <h3>কোড ব্যাখ্যা (Code Explanation)</h3>
+            <div class="subsection">
+                <div class="subsection-content">
+                    <ol>
+                        <li><strong>...numbers: number[] (Rest):</strong> ফাংশন কল করার সময় আমরা কমা দিয়ে আলাদা আলাদা সংখ্যা পাঠিয়েছি (10, 20, 30), কিন্তু ফাংশনের ভেতর <code>...</code> ব্যবহারের কারণে সগুলো numbers নামে একটি অ্যারেতে প্যাক হয়ে গেছে।</li>
+                        <li><strong>const { brand, ...others } (Rest):</strong> অবজেক্ট থেকে <code>brand</code> বের করে নেওয়ার পর, বাকি যা কিছু ছিল (model, year, price) সবগুলোকে একসাথে <code>others</code> নামে নতুন একটি অবজেক্ট ঢুকিয়ে দেওয়া হয়েছে।</li>
+                        <li><strong>[...teamA, ...teamB] (Spread):</strong> এখানে <code>teamA</code> একটি অ্যারে ছিল। <code>...teamA</code> লেখার ফলে অ্যারের ব্র্যাকেট <code>[]</code> উঠে যায় এবং ভেতরের নামগুলো কমা দিয়ে আলাদা আলাদা ভ্যালু হিসেবে বেসে যায়।</li>
+                        <li><strong>{ ...userInfo } (Spread):</strong> অবজেক্টের ক্ষেত্রেও একই। <code>userInfo</code>-এর ভেতরের সব <code>key: value</code> পেয়ার বের করে নতুন অবজেক্ট বিস্তারিত দেওয়া হয়েছে।</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="best-practices">
+                <h4>💡 বেস্ট প্র্যাকটিস / টিপস</h4>
+                <ul>
+                    <li><strong>Rest Parameter:</strong> ফাংশনের প্যারামিটার লিস্টে Rest parameter সবসময় শেষে রাখতে হবে।
+                        <ul>
+                            <li>❌ <code>function wrong(...nums, title)</code> — ভুল!</li>
+                            <li>✅ <code>function right(title, ...nums)</code> — সঠিক।</li>
+                        </ul>
+                    </li>
+                    <li><strong>Immutability (Spread):</strong> রিয়্যাক্ট বা রিডাক্স (React/Redux) ব্যবহারের সময় Spread Operator খুব গুরুত্বপূর্ণ। কারণ এটি অরিজিনাল অ্যারে বা অবজেক্ট পরিবর্তন না করে (mutate না করে) নতুন কপি তৈরি করতে সাহায্য করে।</li>
+                    <li><strong>Object Spread Order:</strong> অবজেক্ট মার্জ করার সময় ডানের অবজেক্টের ভ্যালু বামের অবজেক্টের ভ্যালু ওভাররাইড করবে।</li>
+                    <li><strong>Performance:</strong> অনেক বড় অ্যারে বা অবজেক্টে অতিরিক্ত Spread Operator ব্যবহার করা পারফরম্যান্সে প্রভাব ফেলতে পারে।</li>
+                    <li><strong>Readability:</strong> খুব জটিল Spread/Rest চেইন এড়িয়ে চলুন, কারণ এতে কোড বুঝতে কষ্ট হয়।</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 9. Destructuring -->
+        <section id="destructuring" class="topic-section">
+            <h2>Destructuring (Array & Object)</h2>
+
+            <h3>ধারণা (Concept)</h3>
+            <div class="subsection">
+                <span class="subsection-title">Destructuring কী?</span>
+                <div class="subsection-content">
+                    <p>Destructuring হল ES6 (JavaScript)-এর একটি শক্তিশালী ফিচার যা TypeScript-এ বহুল ব্যবহৃত হয়। এর মাধ্যমে আমরা কোনো Array বা Object-এর ভেতর থেকে ভ্যালুগুলোকে বের করে (Unpack করে) সরাসরি আলাদা আলাদা ভেরিয়েবলে রাখতে পারি।</p>
+                    <p>সহজ কথায়: "পুরো প্যাকেট থেকে কিছু নির্দিষ্ট জিনিস বের করে আলাদা আলাদা বক্সে রাখা"।</p>
+                    <p>এটি দুই ধরনের হয়:</p>
+                    <ol>
+                        <li><strong>Object Destructuring</strong> (অবজেক্ট ভেঙে ভ্যালু বের করা)</li>
+                        <li><strong>Array Destructuring</strong> (অ্যারে ভেঙে ভ্যালু বের করা)</li>
+                    </ol>
+                </div>
+            </div>
+
+            <h3>সিনট্যাক্স (Syntax)</h3>
+            <pre><code>// --- ১. Object Destructuring ---
+const user = {
+    id: 101,
+    fullName: "Mehedi Hasan",
+    age: 25,
+    country: "Bangladesh"
+};
+
+// সাধারণ উপায় (Old Way)
+// const name = user.fullName;
+// const age = user.age;
+
+// Destructuring উপায় (New Way)
+// অবজেক্টের key-এর নামের সাথে মিল রেখে লিখতে হয়
+const { fullName, age, country } = user;
+console.log(fullName);  // "Mehedi Hasan"
+
+// --- ২. Name Alias (নাম পরিবর্তন করা) ---
+// অবজেক্টের 'fullName' প্রপার্টিটি 'myName' ভেরিয়েবলে রাখা হলে
+const { fullName: myName } = user;
+console.log(myName);  // "Mehedi Hasan"
+
+// --- ৩. Array Destructuring ---
+const colors: string[] = ["Red", "Green", "Blue", "Yellow"];
+
+// ক্রম (Order) অনুযায়ী ভ্যালু আসবে
+const [color1, color2, , color4] = colors;
+console.log(color1);  // "Red"
+console.log(color2);  // "Green"
+// color3 স্কিপ করা হয়েছে (কমা দিয়ে)
+console.log(color4);  // "Yellow"
+
+// --- ৪. Function Parameter Destructuring ---
+// ফাংশন কল করার সময় সরাসরি অবজেক্ট থেকে ভ্যালু বের করা
+function printUserDetails({ name, age, city }: { name: string; age: number; city: string }): void {
+    console.log(`Name: ${name}, Age: ${age}, City: ${city}`);
+}
+
+printUserDetails({ name: "Rahim", age: 30, city: "Dhaka" });
+
+// --- ৫. Default Values ---
+const product = {
+    title: "Laptop",
+    price: 50000
+};
+
+// stock প্রপার্টি না থাকলে ডিফল্ট 0 ধরবে
+const { title, price, stock = 0 } = product;
+console.log(stock);  // 0</code></pre>
+
+            <h3>কোড ব্যাখ্যা (Code Explanation)</h3>
+            <div class="subsection">
+                <div class="subsection-content">
+                    <ul>
+                        <li><strong>const { fullName, age } = user:</strong> এখানে <code>user</code> অবজেক্ট থেকে <code>fullName</code> এবং <code>age</code> প্রপার্টি দুটি খুঁজে বের করা হয়েছে এবং একই নামে দুটি ভেরিয়েবল তৈরি করে তাদের মানগুলো রাখা হয়েছে।</li>
+                        <li><strong>{ fullName: myName }:</strong> অনেক সময় অবজেক্টের প্রপার্টির নাম আমাদের পছন্দ হয় না বা অন্য নামে ব্যবহার করতে চাই। তখন আমরা colon (<code>:</code>) ব্যবহার করে নাম পরিবর্তন করতে পারি। একে বলা হয় <strong>Alias</strong>।</li>
+                        <li><strong>const [color1, color2, , color4] = colors:</strong> Array destructuring-এ ক্রম (Index) অনুযায়ী ভ্যালু আসে। আমরা কমা দিয়ে (<code>, ,</code>) কিছু ভ্যালু স্কিপ করতে পারি। এখানে তৃতীয় উপাদান স্কিপ করা হয়েছে।</li>
+                        <li><strong>Function Parameter Destructuring:</strong> ফাংশনের প্যারামিটারের জায়গায় সরাসরি অবজেক্ট destructuring করলে ফাংশনের ভেতর কোড আরও সহজ হয়। আমাদের <code>user.name</code>, <code>user.age</code> লেখার দরকার নেই।</li>
+                        <li><strong>Default Values:</strong> অবজেক্টে কোনো প্রপার্টি না থাকলে ডিফল্ট ভ্যালু সেট করা যায়। উদাহরণে <code>stock = 0</code> দিয়ে বোঝানো হয়েছে যে যদি <code>stock</code> প্রপার্টি না থাকে, তাহলে এর ভ্যালু 0 হবে।</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="best-practices">
+                <h4>💡 বেস্ট প্র্যাকটিস / টিপস</h4>
+                <ul>
+                    <li><strong>Object Destructuring:</strong> অবজেক্ট থেকে একাধিক প্রপার্টি নিতে হলে সবসময় Destructuring ব্যবহার করুন। এতে কোড আরও পরিষ্কার এবং ছোট হয়।</li>
+                    <li><strong>Alias:</strong> যেখানে প্রপার্টির নামের কনফ্লিক্ট হতে পারে বা নাম স্পষ্ট না, সেখানে Alias ব্যবহার করুন।</li>
+                    <li><strong>Array vs Object:</strong> যেখানে ক্রম গুরুত্বপূর্ণ সেখানে Array destructuring, আর যেখানে নির্দিষ্ট প্রপার্টি দরকার সেখানে Object destructuring ব্যবহার করুন।</li>
+                    <li><strong>Nesting:</strong> একাধিক লেভেলের nested অবজেক্ট থেকেও destructuring করা যায়, কিন্তু খুব গভীর nesting এড়িয়ে চলুন।</li>
+                    <li><strong>Default Values:</strong> API রেসপন্স বা যেসব ডেটা যেখানে কিছু ফিল্ড মিসিং হতে পারে, সেখানে সবসময় Default Values ব্যবহার করুন। এতে Runtime Error এড়ানো যায়।</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 10. Type Alias -->
+        <section id="type-alias" class="topic-section">
+            <h2>Type Alias</h2>
+
+            <h3>ধারণা (Concept)</h3>
+            <div class="subsection">
+                <span class="subsection-title">Type Alias কী?</span>
+                <div class="subsection-content">
+                    <p>Type Alias হল একটি কাস্টম টাইপের নাম বা alias। আমরা যেকোনো টাইপের একটি নাম দিতে পারি এবং পরবর্তীতে সেই নাম দিয়ে ওই টাইপটি ব্যবহার করতে পারি। এটি কোড আরও পুনঃব্যবহারযোগ্য এবং পরিষ্কার করে।</p>
+                    <p>Type Alias তৈরি করতে <code>type</code> কীওয়ার্ড ব্যবহার করা হয়।</p>
+                    <p>যেখানে একই টাইপ বারবার ব্যবহার করতে হয়, সেখানে Type Alias খুবই কার্যকর।</p>
+                </div>
+            </div>
+
+            <h3>সিনট্যাক্স (Syntax)</h3>
+            <pre><code>// ১. প্রিমিটিভ টাইপের জন্য Type Alias
+type ID = string | number;  // string অথবা number
+
+let userId: ID = "user123";
+let orderId: ID = 456;
+
+// ২. Object টাইপের জন্য Type Alias
+type User = {
+    id: number;
+    name: string;
+    email: string;
+    age?: number;  // Optional property
+};
+
+const user1: User = {
+    id: 1,
+    name: "Rahim",
+    email: "rahim@example.com",
+    age: 30
+};
+
+const user2: User = {
+    id: 2,
+    name: "Karim",
+    email: "karim@example.com"
+    // age নাদিলেও চলবে
+};
+
+// ৩. Function টাইপের জন্য Type Alias
+type MathOperation = (a: number, b: number) => number;
+
+const add: MathOperation = (a, b) => a + b;
+const multiply: MathOperation = (a, b) => a * b;
+
+// ৪. Union Type সহ Type Alias
+type Status = "pending" | "approved" | "rejected";
+
+let currentStatus: Status = "pending";
+
+function updateStatus(status: Status): void {
+    currentStatus = status;
+    console.log(`Status updated to: ${status}`);
+}
+
+updateStatus("approved");  // Valid
+// updateStatus("random");  // Error: "random" is not assignable to type Status
+
+// ৫. Complex Object সহ Type Alias
+type Address = {
+    street: string;
+    city: string;
+    country: string;
+};
+
+type Person = {
+    name: string;
+    age: number;
+    address: Address;  // Nested Type Alias
+};
+
+const person: Person = {
+    name: "Sakib",
+    age: 34,
+    address: {
+        street: "123 Main St",
+        city: "Dhaka",
+        country: "Bangladesh"
+    }
+};</code></pre>
+
+            <h3>কোড ব্যাখ্যা (Code Explanation)</h3>
+            <div class="subsection">
+                <div class="subsection-content">
+                    <ol>
+                        <li><strong>type ID = string | number:</strong> এখানে আমরা <code>ID</code> নামে একটি টাইপ অ্যালায়াস তৈরি করেছি যা string অথবা number হতে পারে। পরে আমরা <code>userId</code> এবং <code>orderId</code>-এর জন্য একই টাইপ ব্যবহার করতে পারছি।</li>
+                        <li><strong>type User = { ... }:</strong> <code>User</code> নামে একটি অবজেক্ট টাইপ ডিফাইন করেছি। এখন আমরা যতো খুশি User অবজেক্ট তৈরি করতে পারব এবং সবার টাইপ একই থাকবে।</li>
+                        <li><strong>type MathOperation = (a: number, b: number) => number:</strong> ফাংশনের টাইপ সিগনেচারও আমরা অ্যালায়াস করতে পারি। এতে ফাংশনগুলোর টাইপ সেম রাখা সহজ হয়।</li>
+                        <li><strong>type Status = "pending" | "approved" | "rejected":</strong> এটি একটি Union Type যা শুধুমাত্র নির্দিষ্ট তিনটি string ভ্যালু গ্রহণ করবে। অন্য কোনো string দিলে টাইপ এরর হবে। এটি খুবই কার্যকর যেখানে সীমিত স্ট্যাটাস থাকে।</li>
+                        <li><strong>type Person = { name: string; address: Address }:</strong> এক টাইপ অ্যালায়াস অন্য টাইপ অ্যালায়াস ব্যবহার করতে পারে। এখানে <code>Person</code> টাইপের মধ্যে <code>Address</code> টাইপ ব্যবহার করা হয়েছে।</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="best-practices">
+                <h4>💡 বেস্ট প্র্যাকটিস / টিপস</h4>
+                <ul>
+                    <li><strong>নামকরণ:</strong> Type Alias-এর নাম সবসময় PascalCase (যেমন: <code>User</code>, <code>Address</code>) ব্যবহার করুন।</li>
+                    <li><strong>Interface vs Type Alias:</strong> অবজেক্ট টাইপ ব্যবহারের জন্য Interface আর Type Alias দুটিই কাজ করে।
+                        <ul>
+                            <li>Interface: অবজেক্টের আকার বা কন্ট্রাক্ট বেলার জন্য বেটার। extends করা যায়।</li>
+                            <li>Type Alias: Union, Intersection, Primitive types এবং অন্যান্য কমপ্লেক্স টাইপের জন্য বেটার।</li>
+                        </ul>
+                    </li>
+                    <li><strong>পুনঃব্যবহার:</strong> যেকোনো কমপ্লেক্স টাইপ বারবার লেখার পরিবর্তে Type Alias তৈরি করে ব্যবহার করুন। এতে পরিবর্তন করা সহজ হয়।</li>
+                    <li><strong>Literal Types:</strong> নির্দিষ্ট ভ্যালু (যেমন: "pending" | "approved") ব্যবহার করলে কোড আরও নিরাপদ হয়।</li>
+                    <li><strong>Export/Import:</strong> বড় প্রোজেক্টে টাইপগুলো আলাদা ফাইলে রেখে export করে যেখান দরকার সেখান import করুন।</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 11. Union vs Intersection Types -->
+        <section id="union-intersection" class="topic-section">
+            <h2>Union vs Intersection Types</h2>
+
+            <h3>ধারণা (Concept)</h3>
+            <div class="subsection">
+                <span class="subsection-title">Union Type</span>
+                <div class="subsection-content">
+                    <p>Union Type মানে হচ্ছে, একাধিক টাইপের মধ্যে যেকোনো একটিকে allow করা। <code>|</code> (pipe) অপারেটর ব্যবহার করে Union Type তৈরি করা হয়।</p>
+                    <p>উদাহরণ: <code>string | number</code> মানে string অথবা number - যেকোনো একটি হতে পারে।</p>
+                </div>
+
+                <span class="subsection-title" style="margin-top: 1rem;">Intersection Type</span>
+                <div class="subsection-content">
+                    <p>Intersection Type মানে হচ্ছে, দুই বা তার বেশি টাইপের সবগুলোর প্রপার্টি একসাথে নিতে হবে। <code>&</code> (ampersand) অপারেটর ব্যবহার করে Intersection Type তৈরি করা হয়।</p>
+                    <p>উদাহরণ: <code>Person & Employee</code> মানে Person এবং Employee - দুটির সব প্রপার্টি থাকতে হবে।</p>
+                </div>
+            </div>
+
+            <h3>সিনট্যাক্স (Syntax)</h3>
+            <pre><code>// --- ১. Union Type (|) ---
+// Union Type ব্যবহার করে একাধিক টাইপ অ্যালাউ করা
+
+type ID = string | number;
+
+function printId(id: ID): void {
+    console.log(`ID: ${id}`);
+}
+
+printId("user123");  // string - Valid
+printId(456);        // number - Valid
+
+// --- ২. Union Type সহ Function ---
+function display(value: string | number): void {
+    if (typeof value === "string") {
+        console.log(`String value: ${value.toUpperCase()}`);
+    } else {
+        console.log(`Number value: ${value.toFixed(2)}`);
+    }
+}
+
+display("hello");   // String value: HELLO
+display(3.14159);   // Number value: 3.14
+
+// --- ৩. Intersection Type (&) ---
+// দুটি ইন্টারফেস ডিফাইন
+interface Person {
+    name: string;
+    age: number;
+}
+
+interface Employee {
+    employeeId: string;
+    department: string;
+}
+
+// Intersection Type - দুটির সব প্রপার্টি প্রয়োজন
+type PersonEmployee = Person & Employee;
+
+const employee: PersonEmployee = {
+    name: "Rahim",
+    age: 30,
+    employeeId: "EMP001",
+    department: "Engineering"
+};
+
+// --- ৪. Intersection Type সহ Object ---
+type Printable = {
+    print(): void;
+};
+
+type Loggable = {
+    log(): void;
+};
+
+type PrintableAndLoggable = Printable & Loggable;
+
+const myObject: PrintableAndLoggable = {
+    print() {
+        console.log("Printing...");
+    },
+    log() {
+        console.log("Logging...");
+    }
+};
+
+myObject.print();
+myObject.log();</code></pre>
+
+            <h3>কোড ব্যাখ্যা (Code Explanation)</h3>
+            <div class="subsection">
+                <div class="subsection-content">
+                    <ul>
+                        <li><strong>type ID = string | number:</strong> <code>ID</code> টাইপটি string অথবা number হতে পারে। আমরা ফাংশনের প্যারামিটারে ব্যবহার করেছি যাতে ইউজার যেকোনো একটি পাঠাতে পারে।</li>
+                        <li><strong>typeof চেক:</strong> Union Type ব্যবহারের সময় আমরা কোডের ভেতর <code>typeof</code> অপারেটর দিয়ে টাইপ চেক করতে পারি। এতে আমরা নির্দিষ্ট টাইপের জন্য নির্দিষ্ট অপারেশন করতে পারি।</li>
+                        <li><strong>type PersonEmployee = Person & Employee:</strong> <code>&</code> অপারেটর ব্যবহার করে আমরা দুটি টাইপের Intersection তৈরি করেছি। এর মানে হল <code>employee</code> অবজেক্টের <code>Person</code> এবং <code>Employee</code> - দুটির সব প্রপার্টি থাকতে হবে।</li>
+                        <li><strong>Intersection সহ Object:</strong> আমরা দুটি ভিন্ন অবজেক্ট টাইপের Intersection তৈরি করতে পারি। এতে নতুন অবজেক্টে দুটির সব মেথড থাকবে।</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>কোম্বিনেশন উদাহরণ</h3>
+            <pre><code>// Union এবং Intersection একসাথে ব্যবহার
+
+type Status = "success" | "error" | "loading";
+
+type ApiResponse<T> = {
+    status: Status;
+    data?: T;
+    error?: string;
+};
+
+// Data টাইপ
+type UserData = {
+    id: number;
+    name: string;
+};
+
+type UserResponse = ApiResponse<UserData>;
+
+const successResponse: UserResponse = {
+    status: "success",
+    data: {
+        id: 1,
+        name: "Rahim"
+    }
+};
+
+const errorResponse: UserResponse = {
+    status: "error",
+    error: "Invalid credentials"
+};</code></pre>
+
+            <div class="best-practices">
+                <h4>💡 বেস্ট প্র্যাকটিস / টিপস</h4>
+                <ul>
+                    <li><strong>Union Type Use:</strong> যেখানে ভ্যালু একাধিক টাইপের হতে পারে (যেমন: API response, user input), সেখানে Union Type ব্যবহার করুন।</li>
+                    <li><strong>Intersection Type Use:</strong> যেখানে একাধিক টাইপের ফিচার একসাথে দরকার হয় (যেমন: একজন Person এবং Employee), সেখানে Intersection Type ব্যবহার করুন।</li>
+                    <li><strong>Type Guard:</strong> Union Type ব্যবহারের সময় সবসময় <code>typeof</code>, <code>instanceof</code>, বা custom type guard ব্যবহার করে টাইপ চেক করুন।</li>
+                    <li><strong>Discriminated Unions:</strong> কমপ্লেক্স Union Type ব্যবহারের সময় discriminant property (যেমন: <code>status</code>) ব্যবহার করে কোড আরও টাইপ-সেফ করুন।</li>
+                    <li><strong>পুনঃব্যবহার:</strong> বারবার একই Union বা Intersection টাইপ লেখার পরিবর্তে Type Alias তৈরি করে ব্যবহার করুন।</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 12. Modern Operators -->
+        <section id="modern-operators" class="topic-section">
+            <h2>Modern Operators</h2>
+
+            <h3>ধারণা (Concept)</h3>
+            <div class="subsection">
+                <span class="subsection-title">Modern JavaScript/TypeScript Operators</span>
+                <div class="subsection-content">
+                    <p>Modern JavaScript এবং TypeScript-এ কিছু আধুনিক অপারেটর আছে যা কোড আরও সহজ এবং নিরাপদ করে। এই অপারেটরগুলো বিশেষ করে null এবং undefined হ্যান্ডল করতে খুব কার্যকর।</p>
+                    <p>প্রধান Modern Operators:</p>
+                    <ol>
+                        <li><strong>Ternary Operator (?:)</strong> - সংক্ষিপ্ত if-else</li>
+                        <li><strong>Nullish Coalescing Operator (??)</strong> - null বা undefined চেক</li>
+                        <li><strong>Optional Chaining Operator (?.)</strong> - নিরাপদ প্রপার্টি এক্সেস</li>
+                    </ol>
+                </div>
+            </div>
+
+            <h3>১. Ternary Operator (?:)</h3>
+            <div class="subsection">
+                <span class="subsection-title">সিনট্যাক্স</span>
+                <pre><code>// Ternary Operator: condition ? valueIfTrue : valueIfFalse
+
+let age: number = 25;
+let message: string;
+
+// Traditional if-else
+if (age >= 18) {
+    message = "Adult";
+} else {
+    message = "Minor";
+}
+
+// Using Ternary Operator
+message = age >= 18 ? "Adult" : "Minor";
+console.log(message);  // "Adult"
+
+// Nested Ternary (এড়ানো উচিত)
+let score: number = 85;
+let grade: string = score >= 90 ? "A" : score >= 80 ? "B" : score >= 70 ? "C" : "F";
+console.log(grade);  // "B"</code></pre>
+            </div>
+
+            <h3>২. Nullish Coalescing Operator (??)</h3>
+            <div class="subsection">
+                <span class="subsection-title">সিনট্যাক্স</span>
+                <pre><code>// Nullish Coalescing: left ?? right
+// শুধুমাত্র null বা undefined হলে right রিটার্ন হবে
+
+let username: string | null = null;
+let displayName: string = username ?? "Guest";
+console.log(displayName);  // "Guest"
+
+// 0 বা false হলেও ?? এর আগের ভ্যালু রিটার্ন হবে
+let count: number = 0;
+let displayCount: number = count ?? 10;
+console.log(displayCount);  // 0 (not 10)
+
+// তুলনা: OR Operator (||) vs Nullish Coalescing (??)
+let value: number | null = 0;
+console.log(value || 10);   // 10 (because 0 is falsy)
+console.log(value ?? 10);   // 0 (because 0 is not null/undefined)</code></pre>
+            </div>
+
+            <h3>৩. Optional Chaining Operator (?.)</h3>
+            <div class="subsection">
+                <span class="subsection-title">সিনট্যাক্স</span>
+                <pre><code>// Optional Chaining: object?.property
+// যদি object null বা undefined হয়, তাহলে undefined রিটার্ন হবে
+
+type User = {
+    name: string;
+    address?: {
+        city: string;
+        country: string;
+    };
+};
+
+const user1: User = {
+    name: "Rahim",
+    address: {
+        city: "Dhaka",
+        country: "Bangladesh"
+    }
+};
+
+const user2: User = {
+    name: "Karim"
+};
+
+// Safe property access
+console.log(user1.address?.city);     // "Dhaka"
+console.log(user2.address?.city);     // undefined (no error!)
+
+// Optional chaining সহ method call
+const data = {
+    getValue: () => "Hello"
+};
+
+console.log(data.getValue?.());        // "Hello"
+console.log(data.nonExistentMethod?.());  // undefined
+
+// Multiple optional chaining
+const nested = {
+    level1: {
+        level2: {
+            level3: {
+                value: "Deep value"
+            }
+        }
+    }
+};
+
+console.log(nested.level1?.level2?.level3?.value);  // "Deep value"
+console.log(nested.level1?.level2?.level4?.value);  // undefined</code></pre>
+            </div>
+
+            <div class="best-practices">
+                <h4>💡 বেস্ট প্র্যাকটিস / টিপস</h4>
+                <ul>
+                    <li><strong>Ternary Operator:</strong> সহজ এবং ছোট if-else এর জন্য Ternary ব্যবহার করুন। তবে খুব জটিল nested ternary এড়িয়ে চলুন।</li>
+                    <li><strong>Nullish Coalescing (??):</strong> যেখানে আপনি শুধুমাত্র null বা undefined চেক করতে চান, সেখানে <code>??</code> ব্যবহার করুন। <code>||</code> অপারেটর 0, false, "" কেও falsy হিসেবে ধরে।</li>
+                    <li><strong>Optional Chaining (?.):</strong> API response বা nested object এক্সেস করার সময় সবসময় Optional Chaining ব্যবহার করুন। এতে Runtime Error এড়ানো যায়।</li>
+                    <li><strong>Combined Use:</strong> <code>?.</code> এবং <code>??</code> একসাথে ব্যবহার করলে খুব শক্তিশালী null-safe কোড লেখা যায়।
+                        <br>উদাহরণ: <code>user.address?.city ?? "Unknown"</code>
+                    </li>
+                    <li><strong>পারফরম্যান্স:</strong> অতিরিক্ত Optional Chaining এবং Nullish Coalescing ব্যবহার করা সাধারণত পারফরম্যান্সে খুব বেশি প্রভাব ফেলায় না।</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 13. Nullable, Unknown, Never Types -->
+        <section id="nullable-types" class="topic-section">
+            <h2>Nullable, Unknown, Never Types</h2>
+
+            <h3>ধারণা (Concept)</h3>
+            <div class="subsection">
+                <span class="subsection-title">Special TypeScript Types</span>
+                <div class="subsection-content">
+                    <p>TypeScript-এ কিছু স্পেশাল টাইপ আছে যা কোড আরও নিরাপদ এবং টাইপ-সেফ করে। এই টাইপগুলো বিশেষ করে এজ কেস এবং error handling-এর জন্য ডিজাইন করা হয়েছে।</p>
+                    <p>প্রধান Special Types:</p>
+                    <ol>
+                        <li><strong>Nullable Types</strong> - null এবং undefined হতে পারে</li>
+                        <li><strong>Unknown Type</strong> - যেকোনো টাইপ কিন্তু টাইপ চেক আবশ্যক</li>
+                        <li><strong>Never Type</strong> - কখনো কিছু রিটার্ন করে না</li>
+                    </ol>
+                </div>
+            </div>
+
+            <h3>১. Nullable Types</h3>
+            <div class="subsection">
+                <span class="subsection-title">সিনট্যাক্স</span>
+                <pre><code>// Nullable Types: ভ্যালু null বা undefined হতে পারে
+
+// Strict null checks অন করা থাকলে
+let username: string | null = null;
+let age: number | undefined = undefined;
+let email: string | null | undefined = null;
+
+// Type narrowing - আগে চেক করে তারপর ব্যবহার
+function printName(name: string | null): void {
+    if (name !== null) {
+        console.log(`Name: ${name.toUpperCase()}`);
+    } else {
+        console.log("Name is null");
+    }
+}
+
+printName("Rahim");   // Name: RAHIM
+printName(null);      // Name is null
+
+// Non-null assertion operator (!) - সতর্কতার সাথে ব্যবহার করুন
+function getLength(str: string | null): number {
+    return str!.length;  // বলছি আমি নিশ্চিত এটা null না
+}
+
+// Default value সহ
+function greet(name: string | null): string {
+    return `Hello, ${name ?? "Guest"}!`;
+}
+
+console.log(greet("Rahim"));  // Hello, Rahim!
+console.log(greet(null));    // Hello, Guest!</code></pre>
+            </div>
+
+            <h3>২. Unknown Type</h3>
+            <div class="subsection">
+                <span class="subsection-title">সিনট্যাক্স</span>
+                <pre><code>// Unknown Type: যেকোনো টাইপ কিন্তু ব্যবহারের আগে টাইপ চেক আবশ্যক
+
+// any vs unknown
+let valueAny: any = "Hello";
+let valueUnknown: unknown = "Hello";
+
+// any - টাইপ চেক ছাড়াই ব্যবহার করা যায়
+console.log(valueAny.toUpperCase());  // OK (কিন্তু unsafe)
+
+// unknown - আগে টাইপ চেক করতে হবে
+// console.log(valueUnknown.toUpperCase());  // Error!
+
+// টাইপ চেক করে ব্যবহার
+if (typeof valueUnknown === "string") {
+    console.log(valueUnknown.toUpperCase());  // OK
+}
+
+// Function parameter হিসেবে unknown
+function processData(data: unknown): void {
+    if (typeof data === "string") {
+        console.log(`String: ${data}`);
+    } else if (typeof data === "number") {
+        console.log(`Number: ${data}`);
+    } else if (Array.isArray(data)) {
+        console.log(`Array with ${data.length} elements`);
+    } else {
+        console.log("Unknown type");
+    }
+}
+
+processData("Hello");
+processData(123);
+processData([1, 2, 3]);</code></pre>
+            </div>
+
+            <h3>৩. Never Type</h3>
+            <div class="subsection">
+                <span class="subsection-title">সিনট্যাক্স</span>
+                <pre><code>// Never Type: কখনো কিছু রিটার্ন করে না
+
+// ১. ফাংশন যা কখনো রিটার্ন করে না
+function throwError(message: string): never {
+    throw new Error(message);
+    // এর পরের কোড কখনো execute হবে না
+}
+
+// ২. Infinite loop
+function infiniteLoop(): never {
+    while (true) {
+        // কখনো রিটার্ন করবে না
+    }
+}
+
+// ৩. Exhaustive checks
+type Shape =
+    | { kind: "circle"; radius: number }
+    | { kind: "square"; side: number }
+    | { kind: "triangle"; base: number; height: number };
+
+function getArea(shape: Shape): number {
+    switch (shape.kind) {
+        case "circle":
+            return Math.PI * shape.radius * shape.radius;
+        case "square":
+            return shape.side * shape.side;
+        case "triangle":
+            return 0.5 * shape.base * shape.height;
+        default:
+            // TypeScript এখানে বুঝতে পারবে সব case কভার হয়ে গেছে
+            const _exhaustiveCheck: never = shape;
+            return _exhaustiveCheck;
+    }
+}
+
+// never type সহ Union type narrowing
+function processValue(value: string | number): never {
+    if (typeof value === "string") {
+        console.log(value);
+        return;  // return void
+    }
+    console.log(value * 2);
+    return;  // return void
+}</code></pre>
+            </div>
+
+            <div class="best-practices">
+                <h4>💡 বেস্ট প্র্যাকটিস / টিপস</h4>
+                <ul>
+                    <li><strong>Nullable Types:</strong> যখনই সম্ভব null check করে তারপর ভ্যালু ব্যবহার করুন। Non-null assertion (<code>!</code>) খুব সতর্কতার সাথে ব্যবহার করুন।</li>
+                    <li><strong>any vs Unknown:</strong> <code>any</code> ব্যবহার করা থেকে বিরত থাকুন। যখন টাইপ নিশ্চিত না তখন <code>unknown</code> ব্যবহার করুন এবং টাইপ চেক করে ব্যবহার করুন।</li>
+                    <li><strong>Never Type:</strong>
+                        <ul>
+                            <li>Error throwing ফাংশনের রিটার্ন টাইপ হিসেবে ব্যবহার করুন।</li>
+                            <li>Exhaustive type checking-এর জন্য ব্যবহার করুন যাতে সব case কভার হয়েছে তা নিশ্চিত হতে পারেন।</li>
+                        </ul>
+                    </li>
+                    <li><strong>Type Guard Functions:</strong> <code>unknown</code> টাইপ হ্যান্ডল করার জন্য Type Guard Functions ব্যবহার করুন।</li>
+                    <li><strong>API Response:</strong> API response হ্যান্ডল করার সময় proper type checking করে <code>unknown</code> থেকে specific type-এ convert করুন।</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 TypeScript স্টাডি নোট (বাংলা) | PDF থেকে সংগৃহীত</p>
+        <p style="margin-top: 0.5rem; opacity: 0.7;">হ্যাপি কোডিং! 🚀</p>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" onclick="scrollToTop()">↑</button>
+
+    <!-- JavaScript -->
+    <script>
+        // 1. Smooth scrolling সক্ষম করা
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+
+                    // Active class আপডেট করা
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // 2. Scroll event দিয়ে active nav link আপডেট করা
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.topic-section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+
+                if (window.scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Scroll to top button দেখানো/লুকানো
+            const scrollBtn = document.querySelector('.scroll-top');
+            if (window.scrollY > 300) {
+                scrollBtn.classList.add('show');
+            } else {
+                scrollBtn.classList.remove('show');
+            }
+        });
+
+        // 3. Scroll to top ফাংশন
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // 4. Dark mode toggle
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.querySelector('.theme-toggle');
+
+            body.classList.toggle('dark-mode');
+
+            if (body.classList.contains('dark-mode')) {
+                themeBtn.textContent = '☀️ লাইট মোড';
+                themeBtn.style.backgroundColor = '#fbbf24';
+                themeBtn.style.color = '#1a1a1a';
+            } else {
+                themeBtn.textContent = '🌙 ডার্ক মোড';
+                themeBtn.style.backgroundColor = '#3b82f6';
+                themeBtn.style.color = 'white';
+            }
+        }
+
+        // 5. পেজ লোড হলে ডিফল্ট সেকশন হাইলাইট করা
+        document.addEventListener('DOMContentLoaded', () => {
+            const firstNav = document.querySelector('.nav-link');
+            if (firstNav) {
+                firstNav.classList.add('active');
+            }
+        });
+
+        // 6. কীবোর্ড নেভিগেশন
+        document.addEventListener('keydown', (e) => {
+            // ESC চাপলে টপে যাওয়া
+            if (e.key === 'Escape') {
+                scrollToTop();
+            }
+
+            // Arrow keys দিয়ে নেভিগেশন
+            const navLinks = Array.from(document.querySelectorAll('.nav-link'));
+            const activeIndex = navLinks.findIndex(link => link.classList.contains('active'));
+
+            if (e.key === 'ArrowDown' && activeIndex < navLinks.length - 1) {
+                e.preventDefault();
+                navLinks[activeIndex + 1].click();
+            } else if (e.key === 'ArrowUp' && activeIndex > 0) {
+                e.preventDefault();
+                navLinks[activeIndex - 1].click();
+            }
+        });
+
+        console.log('TypeScript স্টাডি নোট লোড হয়েছে! 🚀');
+    </script>
+</body>
+</html>
