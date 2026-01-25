@@ -965,24 +965,29 @@ function loggingIdentity<T extends Lengthwise>(arg: T): T {
 
 
         // --- 4. SYNTAX HIGHLIGHTER (Simple Regex Based) ---
-        function highlightCode() {
-            const pres = document.querySelectorAll('pre code');
-            const keywords = /\b(function|return|var|let|const|if|else|for|while|class|extends|interface|type|import|export|from|new|this|super|async|await|try|catch|throw|abstract|private|public|protected)\b/g;
-            const types = /\b(string|number|boolean|any|void|never|unknown|null|undefined|object|symbol|bigint)\b/g;
-            
-            pres.forEach(pre => {
-                let html = pre.innerHTML
-                    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") // Escape HTML
-                    .replace(/(\/\/.*$)/gm, '<span class="syntax-comment">$1</span>') // Comments
-                    .replace(/(".*?"|'.*?'|`.*?`)/g, '<span class="syntax-string">$1</span>') // Strings
-                    .replace(keywords, '<span class="syntax-keyword">$1</span>') // Keywords
-                    .replace(types, '<span class="syntax-type">$1</span>') // Types
-                    .replace(/\b(\d+)\b/g, '<span class="syntax-number">$1</span>'); // Numbers
+function highlightCode() {
+    const pres = document.querySelectorAll('pre code');
+    const keywords = /\b(function|return|var|let|const|if|else|for|while|class|extends|interface|type|import|export|from|new|this|super|async|await|try|catch|throw|abstract|private|public|protected)\b/g;
+    const types = /\b(string|number|boolean|any|void|never|unknown|null|undefined|object|symbol|bigint)\b/g;
 
-                pre.innerHTML = html;
-            });
-        }
-        highlightCode();
+    pres.forEach(pre => {
+        let html = pre.textContent
+            // Strings FIRST
+            .replace(/(".*?"|'.*?'|`.*?`)/g, '<span class="syntax-string">$1</span>')
+            // Comments AFTER
+            .replace(/(\/\/.*$)/gm, '<span class="syntax-comment">$1</span>')
+            // Keywords & types
+            .replace(keywords, '<span class="syntax-keyword">$1</span>')
+            .replace(types, '<span class="syntax-type">$1</span>')
+            // Numbers
+            .replace(/\b(\d+)\b/g, '<span class="syntax-number">$1</span>');
+
+        pre.innerHTML = html;
+    });
+}
+
+highlightCode();
+
 
 
         // --- 5. COPY TO CLIPBOARD ---
@@ -1045,7 +1050,7 @@ function loggingIdentity<T extends Lengthwise>(arg: T): T {
             let node;
 
             while(node = walk.nextNode()) {
-                if (node.nodeValue.toLowerCase().includes(term) && node.parentElement.tagName !== 'SCRIPT' && node.parentElement.tagName !== 'STYLE' && node.parentElement.tagName !== 'CODE') {
+                if (node.nodeValue.toLowerCase().includes(term) &&  !node.parentElement.closest('pre') &&    node.parentElement.tagName !== 'SCRIPT' && node.parentElement.tagName !== 'STYLE' && node.parentElement.tagName !== 'CODE') {
                     nodesToReplace.push(node);
                 }
             }
