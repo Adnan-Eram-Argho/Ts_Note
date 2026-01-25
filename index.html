@@ -3,206 +3,271 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TypeScript Notes - বাংলা টিউটোরিয়াল</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
+    <title>TypeScript Masterclass | Complete Guide</title>
     <style>
-        /* --- CSS VARIABLES --- */
         :root {
-            /* Dark Mode (Default) */
-            --bg-body: #050505;
-            --bg-sidebar: #111111;
-            --bg-card: #161616;
-            --bg-code: #1e1e1e;
-            --text-main: #e0e0e0;
-            --text-muted: #a0a0a0;
-            --accent: #3178c6; /* TypeScript Blue */
-            --accent-hover: #235a97;
-            --border: #333;
-            --syntax-keyword: #569cd6;
-            --syntax-string: #ce9178;
-            --syntax-comment: #6a9955;
-            --syntax-func: #dcdcaa;
-            --syntax-type: #4ec9b0;
+            /* DEEP DARK THEME VARIABLES */
+            --bg-body: #0b0f14;
+            --bg-sidebar: #0d1117;
+            --bg-card: #161b22;
+            --bg-code: #010409;
+            --border-color: #30363d;
+            
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+            --text-highlight: #58a6ff;
+            
+            --accent-primary: #58a6ff; /* Neon Blue */
+            --accent-secondary: #bc8cff; /* Purple */
+            --accent-success: #3fb950;
+            --accent-warning: #d29922;
+            --accent-danger: #f85149;
+
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-code: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+
+            --shadow-card: 0 4px 12px rgba(0,0,0,0.5);
+            --transition: all 0.3s ease;
         }
 
-        /* Light Mode Overrides */
-        body.light-theme {
+        /* LIGHT MODE OVERRIDES */
+        [data-theme="light"] {
             --bg-body: #ffffff;
-            --bg-sidebar: #f8f9fa;
+            --bg-sidebar: #f6f8fa;
             --bg-card: #ffffff;
-            --bg-code: #f4f4f4;
-            --text-main: #1f1f1f;
-            --text-muted: #555555;
-            --accent: #3178c6;
-            --border: #e0e0e0;
-            /* VS Code Light Theme Colors */
-            --syntax-keyword: #0000ff;
-            --syntax-string: #a31515;
-            --syntax-comment: #008000;
-            --syntax-func: #795e26;
-            --syntax-type: #267f99;
+            --bg-code: #f6f8fa;
+            --border-color: #d0d7de;
+
+            --text-main: #24292f;
+            --text-muted: #57606a;
+            --text-highlight: #0969da;
+
+            --accent-primary: #0969da;
+            --shadow-card: 0 2px 8px rgba(0,0,0,0.1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
+        /* RESET & BASE */
+        * { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-main);
             background-color: var(--bg-body);
             color: var(--text-main);
             line-height: 1.6;
-            overflow-x: hidden;
             transition: background-color 0.3s, color 0.3s;
+            overflow-x: hidden;
         }
 
-        /* --- LAYOUT GRID --- */
+        /* LAYOUT GRID */
         .app-container {
             display: grid;
             grid-template-columns: 280px 1fr;
             min-height: 100vh;
         }
 
-        /* --- SIDEBAR --- */
+        /* SIDEBAR */
         .sidebar {
             background-color: var(--bg-sidebar);
-            border-right: 1px solid var(--border);
-            height: 100vh;
+            border-right: 1px solid var(--border-color);
             position: sticky;
             top: 0;
+            height: 100vh;
             overflow-y: auto;
+            padding: 2rem 1rem;
+            z-index: 100;
             display: flex;
             flex-direction: column;
-            transition: transform 0.3s ease-in-out;
-            z-index: 1000;
         }
-
-        .sidebar-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border);
+        
+        .brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-primary);
+            margin-bottom: 2rem;
             display: flex;
-            flex-direction: column;
+            align-items: center;
             gap: 10px;
         }
 
-        .brand-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .brand-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--accent);
-            text-decoration: none;
-        }
-
-        /* Theme Toggle Button */
-        .theme-btn {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .theme-btn:hover {
-            color: var(--text-main);
-            border-color: var(--accent);
-        }
-
-        .theme-btn svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        /* Search Bar */
-        .search-container {
-            position: relative;
-            margin-top: 0.5rem;
-        }
-
-        .search-input {
-            width: 100%;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 0.6rem 1rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .search-input:focus {
-            border-color: var(--accent);
-        }
-
-        /* Navigation Links */
-        .nav-links {
+        .toc-list {
             list-style: none;
-            padding: 1rem 0;
+            flex-grow: 1;
         }
 
-        .nav-item {
+        .toc-link {
             display: block;
-        }
-
-        .nav-link {
-            display: block;
-            padding: 0.75rem 1.5rem;
+            padding: 0.6rem 1rem;
             color: var(--text-muted);
             text-decoration: none;
             font-size: 0.9rem;
-            transition: all 0.2s;
-            border-left: 3px solid transparent;
+            border-radius: 6px;
+            margin-bottom: 4px;
+            transition: var(--transition);
         }
 
-        .nav-link:hover, .nav-link.active {
-            background-color: rgba(49, 120, 198, 0.1);
-            color: var(--text-main);
-            border-left-color: var(--accent);
+        .toc-link:hover, .toc-link.active {
+            background-color: rgba(88, 166, 255, 0.1);
+            color: var(--accent-primary);
         }
 
-        /* --- MAIN CONTENT --- */
+        .toc-category {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin: 1.5rem 0 0.5rem 0.5rem;
+            font-weight: 700;
+        }
+
+        /* MAIN CONTENT */
         .main-content {
             padding: 2rem;
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
             width: 100%;
         }
 
-        /* Mobile Header */
-        .mobile-header {
-            display: none;
-            padding: 1rem;
-            background: var(--bg-sidebar);
-            border-bottom: 1px solid var(--border);
-            align-items: center;
-            justify-content: space-between;
+        /* SEARCH BAR */
+        .search-container {
             position: sticky;
             top: 0;
-            z-index: 1001;
+            background-color: var(--bg-body);
+            padding: 1rem 0;
+            z-index: 90;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            background-color: rgba(11, 15, 20, 0.8);
         }
 
-        .menu-btn {
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+        }
+
+        /* SECTIONS & CARDS */
+        section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 120px; /* Offset for sticky header */
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .topic-header {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        h1, h2, h3 { color: var(--text-main); }
+        h2 { font-size: 2rem; margin-bottom: 1rem; }
+        h2 code { font-size: 0.7em; background: var(--bg-code); padding: 2px 6px; border-radius: 4px; color: var(--accent-secondary); }
+        
+        h3 { font-size: 1.4rem; margin: 1.5rem 0 1rem; color: var(--accent-primary); }
+
+        p { margin-bottom: 1rem; font-size: 1.05rem; color: var(--text-muted); }
+
+        /* BOXES (TIPS, NOTES, WARNINGS) */
+        .box {
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 4px solid;
+            background-color: var(--bg-card);
+        }
+
+        .tip-box { border-color: var(--accent-warning); background: rgba(210, 153, 34, 0.05); }
+        .tip-box strong { color: var(--accent-warning); display: block; margin-bottom: 0.5rem; }
+
+        .note-box { border-color: var(--accent-primary); background: rgba(88, 166, 255, 0.05); }
+        .note-box strong { color: var(--accent-primary); display: block; margin-bottom: 0.5rem; }
+
+        .mistake-box { border-color: var(--accent-danger); background: rgba(248, 81, 73, 0.05); }
+        .mistake-box strong { color: var(--accent-danger); display: block; margin-bottom: 0.5rem; }
+
+        /* CODE BLOCKS */
+        .code-container {
+            position: relative;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        pre {
+            background-color: var(--bg-code);
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: var(--font-code);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        code { font-family: var(--font-code); }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .copy-btn:hover { color: var(--accent-primary); border-color: var(--accent-primary); }
+
+        /* SYNTAX HIGHLIGHTING (Generated Classes) */
+        .syntax-keyword { color: #ff7b72; }
+        .syntax-type { color: #79c0ff; }
+        .syntax-string { color: #a5d6ff; }
+        .syntax-comment { color: #8b949e; font-style: italic; }
+        .syntax-func { color: #d2a8ff; }
+        .syntax-number { color: #79c0ff; }
+
+        /* HIGHLIGHTING SEARCH */
+        mark {
+            background-color: rgba(210, 153, 34, 0.4);
+            color: var(--text-main);
+            border-radius: 2px;
+            padding: 0 2px;
+        }
+
+        /* MOBILE RESPONSIVE */
+        .mobile-header {
+            display: none;
+            position: sticky;
+            top: 0;
+            background: var(--bg-sidebar);
+            padding: 1rem;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .menu-toggle {
             background: none;
             border: none;
             color: var(--text-main);
@@ -210,845 +275,800 @@
             cursor: pointer;
         }
 
-        /* --- CONTENT SECTIONS --- */
-        section {
-            margin-bottom: 4rem;
-            scroll-margin-top: 2rem;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(to right, var(--text-main), var(--text-muted));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        h2 {
-            font-size: 1.8rem;
-            color: var(--accent);
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        h3 {
-            font-size: 1.3rem;
-            margin: 1.5rem 0 0.75rem;
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border-color);
             color: var(--text-main);
-        }
-
-        p {
-            margin-bottom: 1rem;
-            color: var(--text-muted);
-            font-size: 1.05rem;
-        }
-
-        ul {
-            margin-bottom: 1rem;
-            padding-left: 1.5rem;
-            color: var(--text-muted);
-        }
-
-        li {
-            margin-bottom: 0.5rem;
-        }
-
-        /* --- CODE BLOCKS --- */
-        .code-container {
-            position: relative;
-            background-color: var(--bg-code);
-            border-radius: 8px;
-            margin: 1.5rem 0;
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-
-        .code-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.5rem 1rem;
-            background: rgba(255,255,255,0.05); /* Slight transparency for header */
-            border-bottom: 1px solid var(--border);
-        }
-
-        body.light-theme .code-header {
-            background: rgba(0,0,0,0.05);
-        }
-
-        .lang-tag {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        .copy-btn {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            font-size: 0.75rem;
-            padding: 0.3rem 0.6rem;
-            border-radius: 4px;
+            padding: 5px 10px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.2s;
+            font-size: 1.2rem;
         }
 
-        .copy-btn:hover {
-            background: rgba(255,255,255,0.1);
-            color: var(--text-main);
-        }
-
-        body.light-theme .copy-btn:hover {
-            background: rgba(0,0,0,0.1);
-        }
-
-        pre {
-            padding: 1rem;
-            overflow-x: auto;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            color: var(--text-main);
-        }
-
-        /* Syntax Highlighting */
-        .kwd { color: var(--syntax-keyword); font-weight: 500; }
-        .str { color: var(--syntax-string); }
-        .com { color: var(--syntax-comment); font-style: italic; }
-        .fun { color: var(--syntax-func); }
-        .typ { color: var(--syntax-type); }
-
-        /* Table */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.5rem 0;
-            background: var(--bg-card);
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-
-        th, td {
-            padding: 0.75rem 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-
-        th {
-            background: var(--bg-sidebar);
-            color: var(--text-main);
-            font-weight: 600;
-        }
-
-        td {
-            color: var(--text-muted);
-        }
-
-        /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
-            .app-container {
-                grid-template-columns: 1fr;
-            }
-
-            .mobile-header {
-                display: flex;
-            }
-
+            .app-container { grid-template-columns: 1fr; }
             .sidebar {
                 position: fixed;
-                left: 0;
-                top: 60px;
+                left: -100%;
                 width: 80%;
                 max-width: 300px;
-                transform: translateX(-100%);
+                transition: 0.3s ease;
                 box-shadow: 5px 0 15px rgba(0,0,0,0.5);
             }
-
-            .sidebar.active {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                padding: 1.5rem;
-            }
-
-            .overlay {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0,0,0,0.7);
-                z-index: 999;
-            }
-
-            .overlay.active {
-                display: block;
-            }
+            .sidebar.active { left: 0; }
+            .mobile-header { display: flex; }
+            .search-container { top: 60px; }
+            h2 { font-size: 1.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Mobile Overlay -->
-    <div class="overlay" id="overlay"></div>
-
-    <!-- Mobile Header -->
-    <header class="mobile-header">
-        <a href="#" class="brand-title" style="font-size: 1rem;">TS Notes</a>
+    <!-- MOBILE HEADER -->
+    <div class="mobile-header">
+        <div class="brand">TS Guide 🚀</div>
         <div style="display: flex; gap: 10px;">
-            <button class="theme-btn" id="themeToggleMobile" aria-label="Toggle Theme">
-                <!-- Icons injected via JS -->
-            </button>
-            <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+            <button class="theme-toggle" id="theme-btn">🌙</button>
+            <button class="menu-toggle" id="menu-btn">☰</button>
         </div>
-    </header>
+    </div>
 
     <div class="app-container">
-        <!-- Sidebar Navigation -->
+        <!-- SIDEBAR NAVIGATION -->
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <div class="brand-row">
-                    <a href="#" class="brand-title">TypeScript নোট</a>
-                    <button class="theme-btn" id="themeToggleSidebar" aria-label="Toggle Theme">
-                        <!-- Icons injected via JS -->
-                    </button>
-                </div>
-                <div class="search-container">
-                    <input type="text" id="searchInput" class="search-input" placeholder="টপিক খুঁজুন...">
-                </div>
-            </div>
-            <ul class="nav-links">
-                <li class="nav-item"><a href="#intro" class="nav-link">ভূমিকা (Introduction)</a></li>
-                <li class="nav-item"><a href="#types" class="nav-link">Primitive Types</a></li>
-                <li class="nav-item"><a href="#non-primitive" class="nav-link">Non-Primitive Types</a></li>
-                <li class="nav-item"><a href="#object-literal" class="nav-link">Object Literal & Optional</a></li>
-                <li class="nav-item"><a href="#functions" class="nav-link">Functions (ফাংশন)</a></li>
-                <li class="nav-item"><a href="#interface-methods" class="nav-link">Interface Methods</a></li>
-                <li class="nav-item"><a href="#rest-spread" class="nav-link">Rest vs Spread</a></li>
-                <li class="nav-item"><a href="#destructuring" class="nav-link">Destructuring</a></li>
-                <li class="nav-item"><a href="#type-alias" class="nav-link">Type Alias</a></li>
-                <li class="nav-item"><a href="#union-intersection" class="nav-link">Union vs Intersection</a></li>
-                <li class="nav-item"><a href="#modern-operators" class="nav-link">Modern Operators</a></li>
-                <li class="nav-item"><a href="#nullable-unknown" class="nav-link">Nullable, Unknown, Never</a></li>
-                <li class="nav-item"><a href="#type-assertion" class="nav-link">Type Assertion</a></li>
-                <li class="nav-item"><a href="#interface" class="nav-link">Interface (ইন্টারফেস)</a></li>
-                <li class="nav-item"><a href="#generics-alias" class="nav-link">Generics: Type Alias</a></li>
-                <li class="nav-item"><a href="#generics-interface" class="nav-link">Generics: Interface</a></li>
-                <li class="nav-item"><a href="#generics-function" class="nav-link">Generics: Function</a></li>
-            </ul>
+            <div class="brand" style="display: none;">TS Guide 🚀</div> 
+            <button class="theme-toggle" id="sidebar-theme-btn" style="margin-bottom: 20px;">🌙 Toggle Theme</button>
+            
+            <nav id="toc-nav">
+                <!-- Auto-generated ToC will be inserted here -->
+            </nav>
         </aside>
 
-        <!-- Main Content Area -->
+        <!-- MAIN CONTENT -->
         <main class="main-content">
+            <!-- SEARCH -->
+            <div class="search-container">
+                <input type="text" class="search-input" id="search-input" placeholder="🔍 Search topics, code, or explanations (e.g., 'interface', 'enum')...">
+            </div>
 
-            <!-- Introduction -->
-            <section id="intro" class="topic-section">
-                <h1>TypeScript কী?</h1>
-                <p>TypeScript হলো JavaScript-এর একটি সুপারসেট যা Microsoft দ্বারা তৈরি করা হয়েছে। এটি মূলত JavaScript-এর কার্যকারিতাকে আরও শক্তিশালী ও নির্ভরযোগ্য করার জন্য ডিজাইন করা হয়েছে, বিশেষ করে বড় আকারের অ্যাপ্লিকেশনের জন্য।</p>
+            <!-- CONTENT SECTIONS -->
+            <div id="content-area">
                 
-                <h3>কেন TypeScript ব্যবহার করবেন?</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>বৈশিষ্ট্য</th>
-                            <th>সুবিধা</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>স্ট্যাটিক টাইপিং (Static Typing)</td>
-                            <td>কোড লেখার সময় ভেরিয়েবল এবং ফাংশনের টাইপ নির্দিষ্ট করা যায়, যা রানটাইম এরর কমায়।</td>
-                        </tr>
-                        <tr>
-                            <td>উন্নত এডিটর সাপোর্ট</td>
-                            <td>VS Code-এ অটো-কমপ্লিশন, ইন্টেলিসেন্স এবং রিফ্যাক্টিং করা সহজ হয়।</td>
-                        </tr>
-                        <tr>
-                            <td>OOP সুবিধা</td>
-                            <td>ক্লাস, ইন্টারফেস, ইনহেরিটেন্স ইত্যাদি ব্যবহার করে বড় কোডবেস পরিচালনা করা সহজ।</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
-
-            <!-- Types in TS -->
-            <section id="types" class="topic-section">
-                <h2>Primitive Data Types</h2>
-                <p>Primitive Data Types হলো TypeScript-এর সবচেয়ে মৌলিক ডেটা টাইপ। এগুলো মেমোরিতে সরাসরি মান (Value) হিসেবে সংরক্ষিত থাকে।</p>
-                
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="lang-tag">TypeScript</span>
-                        <button class="copy-btn">Copy</button>
+                <!-- A. CORE BASICS -->
+                <section id="topic-1" data-category="A. CORE BASICS">
+                    <div class="topic-header">
+                        <h2>1. Introduction to TypeScript</h2>
                     </div>
-                    <pre><code><span class="com">// Primitive Types Examples</span>
+                    <p><strong>Concept:</strong> TypeScript হলো JavaScript-এর একটি সুপারসেট যা Microsoft দ্বারা তৈরি করা হয়েছে। এটি মূলত JavaScript-এর কার্যকারিতাকে আরও শক্তিশালী ও নির্ভরযোগ্য করার জন্য ডিজাইন করা হয়েছে, বিশেষ করে বড় আকারের অ্যাপ্লিকেশনের জন্য।</p>
+                    
+                    <h3>কেন TypeScript ব্যবহার করব?</h3>
+                    <ul>
+                        <li><strong>Static Typing:</strong> কোড লেখার সময় ভেরিয়েবল, ফাংশন প্যারামিটার এবং রিটার্ন ভ্যালুর জন্য টাইপ নির্দিষ্ট করার অনুমতি দেয়।</li>
+                        <li><strong>Early Error Detection:</strong> কম্পাইল করার আগেই টাইপ-সংক্রান্ত ত্রুটি ধরা পড়ে, ফলে রানটাইম ত্রুটি কমে যায়।</li>
+                        <li><strong>Tooling Support:</strong> VS Code-এর মতো এডিটরে অটো-কমপ্লিশন এবং রিফ্যাক্টরিং সুবিধা পাওয়া যায়।</li>
+                    </ul>
 
-<span class="kwd">let</span> userName: <span class="typ">string</span> = <span class="str">"Anisul Islam"</span>;
-<span class="kwd">let</span> age: <span class="typ">number</span> = <span class="num">25</span>;
-<span class="kwd">let</span> isAdmin: <span class="typ">boolean</span> = <span class="kwd">true</span>;
-
-<span class="com">// Null & Undefined</span>
-<span class="kwd">let</span> x: <span class="typ">undefined</span> = <span class="kwd">undefined</span>;
-<span class="kwd">let</span> emptyValue: <span class="typ">null</span> = <span class="kwd">null</span>;</code></pre>
-                </div>
-
-                <h3>Array Type</h3>
-                <p>অ্যারেতে একটি নির্দিষ্ট টাইপের একাধিক উপাদান সংরক্ষণ করা যায়।</p>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="lang-tag">TypeScript</span>
-                        <button class="copy-btn">Copy</button>
+                    <div class="box tip-box">
+                        <strong>Beginner Tip ⚠️</strong>
+                        TypeScript সরাসরি ব্রাউজারে রান করে না। প্রথমে একে JavaScript (.js) এ কম্পাইল করতে হয়।
                     </div>
-                    <pre><code><span class="com">// Syntax 1</span>
-<span class="kwd">let</span> numbers: <span class="typ">number</span>[] = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];
+                </section>
 
-<span class="com">// Syntax 2 (Generic)</span>
-<span class="kwd">let</span> names: <span class="typ">Array</span>&lt;<span class="typ">string</span>&gt; = [<span class="str">"Rahim"</span>, <span class="str">"Karim"</span>];</code></pre>
-                </div>
-            </section>
-
-            <!-- Non-Primitive -->
-            <section id="non-primitive" class="topic-section">
-                <h2>Non-Primitive Data Types</h2>
-                <p>এগুলো একাধিক মান বা জটিল ডেটা স্ট্রাকচার ধারণ করে এবং মেমোরিতে রেফারেন্স (Reference) হিসেবে থাকে।</p>
-                
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="lang-tag">TypeScript</span>
-                        <button class="copy-btn">Copy</button>
+                <section id="topic-2" data-category="A. CORE BASICS">
+                    <div class="topic-header">
+                        <h2>2. Type System Fundamentals</h2>
                     </div>
-                    <pre><code><span class="com">// 1. Array</span>
-<span class="kwd">let</span> friends: <span class="typ">string</span>[] = [<span class="str">"Rahim"</span>, <span class="str">"Karim"</span>];
+                    <p>TypeScript-এর মূল ভিত্তি হলো টাইপ সিস্টেম। এটি নিশ্চিত করে যে আপনার কোড ঠিকমতো ডাটা হ্যান্ডেল করছে।</p>
+                    
+                    <h3>Static Typing vs Dynamic</h3>
+                    <p>JavaScript ডাইনামিক টাইপড (ভেরিয়েবল ঘুরে ফিরে টাইপ বদলাতে পারে), কিন্তু TypeScript স্ট্যাটিক টাইপড (টাইপ একবার সেট করলে আর বদলায় না)।</p>
 
-<span class="com">// 2. Object (Key-Value Pair)</span>
-<span class="kwd">let</span> user: { name: <span class="typ">string</span>; age: <span class="typ">number</span> } = {
-  name: <span class="str">"Shakib"</span>,
-  age: <span class="num">30</span>
+                    <div class="code-container">
+                        <button class="copy-btn">Copy</button>
+<pre><code>let a: number = 10;
+// a = "hello"; // Error: Type 'string' is not assignable to type 'number'
+</code></pre>
+                    </div>
+                </section>
+
+                <!-- B. DATA TYPES -->
+                <section id="topic-3" data-category="B. DATA TYPES">
+                    <div class="topic-header">
+                        <h2>3. Primitive Data Types</h2>
+                    </div>
+                    <p><strong>Concept:</strong> Primitive Data Types হলো TypeScript (এবং JavaScript)-এর সবচেয়ে মৌলিক বা বেসিক ডাটা টাইপ। এগুলা হলো একদম লো-লেভেল ডাটা ভ্যালু যা মেমরিতে সরাসরি মান (Value) হিসেবে সংরক্ষিত থাকে।</p>
+
+                    <div class="code-container">
+                        <button class="copy-btn">Copy</button>
+<pre><code>// 1. String: টেক্সট ডাটার জন্য
+let userName: string = "Anisul Islam";
+
+// 2. Number: পূর্ণসংখ্যা বা দশমিক সংখ্যার জন্য
+let age: number = 25;
+let price: number = 99.99;
+
+// 3. Boolean: শুধুমাত্র true অথবা false এর জন্য
+let isAdmin: boolean = true;
+
+// 4. Undefined: ভেরিয়েবল ডিক্লয়ার করা হয়েছ কিন্তু ভ্যালু দেওয়া হয়নি
+let x: undefined = undefined;
+
+// 5. Null: যখন আমরা ইচ্ছাকৃতভাবে কোনো ভ্যালু খালি রাখতে চাই
+let emptyValue: null = null;
+</code></pre>
+                    </div>
+                </section>
+
+                <section id="topic-4" data-category="B. DATA TYPES">
+                    <div class="topic-header">
+                        <h2>4. Non-Primitive (Reference) Types</h2>
+                    </div>
+                    <p><strong>Concept:</strong> Non-Primitive Types হলো এমন ডাটা টাইপ যা একাধিক মান বা জটিল ডাটা স্ট্রাকচার ধারণ করতে পারে। এরা মেমরিতে সরাসরি ভ্যালু হিসেবে থাকে না, বরং মেমরির লোকেশনের রেফারেন্স হিসেবে থাকে।</p>
+                    
+                    <ul>
+                        <li><strong>Array:</strong> তালিকা।</li>
+                        <li><strong>Object:</strong> কি-ভ্যালু পেয়ার।</li>
+                        <li><strong>Tuple:</strong> ফিক্সড টাইপের অ্যারে।</li>
+                        <li><strong>Enum:</strong> নেমড কনস্ট্যান্টস।</li>
+                    </ul>
+                </section>
+
+                <section id="topic-5" data-category="B. DATA TYPES">
+                    <div class="topic-header">
+                        <h2>5. Array Types</h2>
+                    </div>
+                    <p>অ্যারেতে একটি নির্দিষ্ট টাইপের একাধিক উপাদান সংরক্ষণ করা যায়।</p>
+                    <div class="code-container">
+                        <button class="copy-btn">Copy</button>
+<pre><code>// Syntax 1: type[]
+let numbers: number[] = [1, 2, 3];
+let names: string[] = ["ক", "খ"];
+
+// Syntax 2 (Generic Array Type): Array<type>
+let list: Array<number> = [4, 5, 6];
+</code></pre>
+                    </div>
+                </section>
+
+                <section id="topic-6" data-category="B. DATA TYPES">
+                    <div class="topic-header">
+                        <h2>6. Object Types</h2>
+                    </div>
+                    <p>অবজেক্ট টাইপ ব্যবহার করে ডাটা স্ট্রাকচার ডিফাইন করা হয়।</p>
+                    <div class="code-container">
+                        <button class="copy-btn">Copy</button>
+<pre><code>let user: { name: string; age: number; isAdmin: boolean } = {
+    name: "Shakib",
+    age: 30,
+    isAdmin: true
 };
-
-<span class="com">// 3. Tuple (Fixed length & type)</span>
-<span class="kwd">let</span> role: [<span class="typ">string</span>, <span class="typ">number</span>] = [<span class="str">"Manager"</span>, <span class="num">101</span>];
-
-<span class="com">// 4. Enum (Named constants)</span>
-<span class="kwd">enum</span> <span class="typ">Status</span> {
-  Pending,
-  Approved,
-  Rejected
-}
-<span class="kwd">let</span> currentStatus: <span class="typ">Status</span> = <span class="typ">Status</span>.Approved;</code></pre>
-                </div>
-            </section>
-
-            <!-- Object Literal -->
-            <section id="object-literal" class="topic-section">
-                <h2>Object Literal & Optional Properties</h2>
-                <p>অবজেক্ট লিটারেল হলো অবজেক্ট তৈরির সবচেয়ে সহজ পদ্ধতি। যদি কোনো প্রপার্টি থাকাও না-থাকাও পারে, তবে আমরা <code>?</code> (Optional) চিহ্ন ব্যবহার করি।</p>
-
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="lang-tag">TypeScript</span>
-                        <button class="copy-btn">Copy</button>
+</code></pre>
                     </div>
-                    <pre><code><span class="kwd">let</span> student: {
-  name: <span class="typ">string</span>;
-  id: <span class="typ">number</span>;
-  phone?: <span class="typ">string</span>; <span class="com">// Optional Property</span>
-  address?: <span class="typ">string</span>; <span class="com">// Optional Property</span>
+                </section>
+
+                <section id="topic-7" data-category="B. DATA TYPES">
+                    <div class="topic-header">
+                        <h2>7. Optional Properties & Optional Chaining</h2>
+                    </div>
+                    <p><strong>Concept:</strong> অনেক সময় অবজেক্টের সব প্রপার্টি আমাদের দরকার হয় না। তখন আমরা <code>?</code> চিহ্ন ব্যবহার করি।</p>
+                    <div class="code-container">
+                        <button class="copy-btn">Copy</button>
+<pre><code>let student: {
+    name: string;
+    id: number;
+    phone?: string; // Optional Property
 } = {
-  name: <span class="str">"Mehedi Hasan"</span>,
-  id: <span class="num">2204</span>
-  <span class="com">// phone এবং address না দিলেও কোড রান করবে</span>
+    name: "Mehedi",
+    id: 2204
+    // phone না দিলেও কোড রান করবে
 };
 
-<span class="com">// Optional Chaining</span>
-<span class="kwd">console</span>.log(student.phone?.toUpperCase());</code></pre>
-                </div>
-            </section>
-
-            <!-- Functions -->
-            <section id="functions" class="topic-section">
-                <h2>Functions (ফাংশন)</h2>
-                <p>TypeScript-এ ফাংশনের প্যারামিটার এবং রিটার্ন ভ্যালুর টাইপ আগে থেকেই নির্দিষ্ট করে দেওয়া যায়।</p>
-
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="lang-tag">TypeScript</span>
-                        <button class="copy-btn">Copy</button>
+// Optional Chaining (?.)
+console.log(student.phone?.toUpperCase()); // phone undefined হলে error দেবে না
+</code></pre>
                     </div>
-                    <pre><code><span class="com">// ১. Basic Function</span>
-<span class="kwd">function</span> <span class="fun">add</span>(a: <span class="typ">number</span>, b: <span class="typ">number</span>): <span class="typ">number</span> {
-  <span class="kwd">return</span> a + b;
+                </section>
+
+                <!-- C. FUNCTIONS -->
+                <section id="topic-8" data-category="C. FUNCTIONS">
+                    <div class="topic-header">
+                        <h2>8. Functions in TypeScript</h2>
+                    </div>
+                    <p>TypeScript-এ ফাংশন সংজ্ঞায়িত করার সময় আমরা প্যারামিটার এবং রিটার্ন ভ্যালু টাইপ নির্দিষ্ট করে দিতে পারি।</p>
+                    <div class="code-container">
+                        <button class="copy-btn">Copy</button>
+<pre><code>// Parameter এবং Return Type সহ
+function add(a: number, b: number): number {
+    return a + b;
 }
 
-<span class="com">// ২. Arrow Function</span>
-<span class="kwd">const</span> multiply = (x: <span class="typ">number</span>, y: <span class="typ">number</span>): <span class="typ">number</span> => {
-  <span class="kwd">return</span> x * y;
+// Optional Parameters (?)
+function greet(name: string, message?: string): string {
+    if (message) return `Hello ${name}, ${message}`;
+    return `Hello ${name}`;
+}
+
+// Default Parameters (=)
+function power(base: number, exponent: number = 2): number {
+    return base ** exponent;
+}
+
+// Rest Parameters (...)
+function sumAll(...numbers: number[]): number {
+    return numbers.reduce((total, num) => total + num, 0);
+}
+
+// Void Return Type
+function logMessage(msg: string): void {
+    console.log(msg);
+}
+</code></pre>
+                    </div>
+                    <div class="box note-box">
+                        <strong>Interview Note 💡</strong>
+                        Arrow Function-এ <code>this</code> keyword নিজস্ব scope ধারণ করে না, এটি enclosing scope থেকে নেয়। অবজেক্ট মেথড হিসেবে সাধারণ ফাংশন ব্যবহার করা নিরাপদ।
+                    </div>
+                </section>
+
+                <!-- D. OOP -->
+                <section id="topic-9" data-category="D. OBJECT-ORIENTED PROGRAMMING (OOP)">
+                    <div class="topic-header">
+                        <h2>9. Classes</h2>
+                    </div>
+                    <p>TypeScript ক্লাস ES6 সিনট্যাক্সের উপর ভিত্তি করে তৈরি হয়েছ এবং এতে অ্যাক্সেস মডিফায়ার বা টাইপ সুবিধা রয়েছ।</p>
+                    <div class="code-container">
+                        <button class="copy-btn">Copy</button>
+<pre><code>class Animal {
+    // Properties
+    private name: string; 
+
+    constructor(theName: string) {
+        this.name = theName;
+    }
+
+    // Method
+    move(distanceInMeters: number = 0) {
+        console.log(`${this.name} ${distanceInMeters} মিটার দূরত্ব অতিক্রম করেছ।`);
+    }
+}
+</code></pre>
+                    </div>
+                </section>
+
+                <section id="topic-10" data-category="D. OBJECT-ORIENTED PROGRAMMING (OOP)">
+                    <div class="topic-header">
+                        <h2>10. Encapsulation</h2>
+                    </div>
+                    <p><strong>Concept:</strong> ডাটা এবং মেথডকে একসাথে রাখা এবং বাইরে থেকে সরাসরি অ্যাক্সেস রোধ করা।</p>
+                    <ul>
+                        <li><code>private</code>: শুধুমাত্র ক্লাসের ভেতর অ্যাক্সেসযোগ্য।</li>
+                        <li><code>protected</code>: ক্লাস এবং এর চাইল্ড ক্লাসে অ্যাক্সেসযোগ্য।</li>
+                        <li><code>public</code>: সবখানে অ্যাক্সেসযোগ্য (Default)।</li>
+                    </ul>
+                </section>
+
+                <section id="topic-11" data-category="D. OBJECT-ORIENTED PROGRAMMING (OOP)">
+                    <div class="topic-header">
+                        <h2>11. Inheritance</h2>
+                    </div>
+                    <p><code>extends</code> কিওয়ার্ড ব্যবহার করে একটি ক্লাস অন্য একটি ক্লাসের বৈশিষ্ট্য উত্তরাধিকার সূত্রে পায়।</p>
+                    <div class="code-container">
+                        <button class="copy-btn">Copy</button>
+<pre><code>class Dog extends Animal {
+    bark() {
+        console.log('ঘউ ঘউ!');
+    }
+    
+    move(distanceInMeters = 5) {
+        console.log("দৌড়াচ্ছ...");
+        super.move(distanceInMeters); // বেস ক্লাসের move মেথড কল
+    }
+}
+</code></pre>
+                    </div>
+                </section>
+
+                <section id="topic-12" data-category="D. OBJECT-ORIENTED PROGRAMMING (OOP)">
+                    <div class="topic-header">
+                        <h2>12. Polymorphism</h2>
+                    </div>
+                    <p><strong>Concept:</strong> একই ইন্টারফেস বা মেথডের বিভিন্ন আচরণ। চাইল্ড ক্লাস প্যারেন্ট ক্লাসের মেথডকে নিজের মতো করে রি-রাইট (Override) করতে পারে।</p>
+                    <div class="code-container">
+                        <button class="copy-btn">Copy</button>
+<pre><code>// উদাহরণ: Topic 11 এর Dog ক্লাস দেখুন।
+// Dog ক্লাস Animal এর move() মেথডকে পরিবর্তন করেছে।
+let myDog = new Dog("Tommy");
+myDog.move(10); // Dog এর কাস্টম move কল হবে
+</code></pre>
+                    </div>
+                </section>
+
+                <section id="topic-13" data-category="D. OBJECT-ORIENTED PROGRAMMING (OOP)">
+                    <div class="topic-header">
+                        <h2>13. Abstraction</h2>
+                    </div>
+                    <p><strong>Concept:</strong> ইমপ্লিমেন্টেশন ডিটেইল লুকিয়ে রেখে শুধুমাত্র ফাংশনালিটি ফোকাস করা।</p>
+                    <p>TS-এ <code>abstract</code> ক্লাস এবং মেথড ব্যবহার করা হয়। Abstract ক্লাসকে সরাসরি Instantiate করা যায় না।</p>
+                    <div class="code-container">
+                        <button class="copy-btn">Copy</button>
+<pre><code>abstract class Vehicle {
+    abstract move(): void; // ইমপ্লিমেন্টেশন নেই, শুধু সিগনেচার আছে
+}
+
+class Car extends Vehicle {
+    move() {
+        console.log("Car is moving");
+    }
+}
+</code></pre>
+                    </div>
+                </section>
+
+                <!-- E. INTERFACES & TYPES -->
+                <section id="topic-14" data-category="E. INTERFACES & TYPES">
+                    <div class="topic-header">
+                        <h2>14. Interfaces</h2>
+                    </div>
+                    <p>ইন্টারফেস হলো একটি স্ট্রাকচারাল চুক্তি যা অবজেক্টের আকার বর্ণনা করতে ব্যবৃত হয়।</p>
+                    <div class="code-container">
+                        <button class="copy-btn">Copy</button>
+<pre><code>interface Person {
+    firstName: string;
+    lastName: string;
+    age?: number; // Optional
+}
+
+// Extending Interface
+interface Employee extends Person {
+    salary: number;
+}
+
+const emp1: Employee = {
+    firstName: "Rahim",
+    lastName: "Khan",
+    salary: 50000
+};
+</code></pre>
+                    </div>
+                    <div class="box tip-box">
+                        <strong>Beginner Tip ⚠️</strong>
+                        Interface শুধুমাত্র অবজেক্টের স্ট্রাকচার ডিফাইন করতে ব্যবৃত হয়, Union টাইপ বা Primitives এর জন্য Type Alias ব্যবহার করুন।
+                    </div>
+                </section>
+
+                <section id="topic-15" data-category="E. INTERFACES & TYPES">
+                    <div class="topic-header">
+                        <h2>15. Type Alias</h2>
+                    </div>
+                    <p>আমরা যেকোনো টাইপের একটি নিজস্ব নাম (Custom Name) দিতে পারি।</p>
+                    <div class="code-container">
+                        <button class="copy-btn">Copy</button>
+<pre><code>// Primitive Alias
+type UserName = string;
+
+// Object Alias
+type Student = {
+    id: number;
+    name: string;
 };
 
-<span class="com">// ৩. Optional Parameters (?)</span>
-<span class="kwd">function</span> <span class="fun">greet</span>(name: <span class="typ">string</span>, message?: <span class="typ">string</span>): <span class="typ">string</span> {
-  <span class="kwd">if</span> (message) {
-    <span class="kwd">return</span> <span class="str">`Hello ${name}, ${message}`</span>;
-  }
-  <span class="kwd">return</span> <span class="str">`Hello ${name}`</span>;
-}</code></pre>
-                </div>
-            </section>
-
-            <!-- Interface Methods -->
-            <section id="interface-methods" class="topic-section">
-                <h2>Interface with Methods</h2>
-                <p>ইন্টারফেস অবজেক্টের স্ট্রাকচার বর্ণনা করে, এমনকি এর ভেতরে মেথডও থাকতে পারে।</p>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="lang-tag">TypeScript</span>
-                        <button class="copy-btn">Copy</button>
+// Union Type Alias
+type ID = number | string;
+</code></pre>
                     </div>
-                    <pre><code><span class="kwd">interface</span> <span class="typ">User</span> {
-  firstName: <span class="typ">string</span>;
-  lastName: <span class="typ">string</span>;
-  age: <span class="typ">number</span>;
-  
-  <span class="com">// Method Signature</span>
-  <span class="fun">getFullName</span>(): <span class="typ">string</span>;
-  <span class="fun">updateAge</span>(newAge: <span class="typ">number</span>): <span class="typ">void</span>;
+                </section>
+
+                <section id="topic-16" data-category="E. INTERFACES & TYPES">
+                    <div class="topic-header">
+                        <h2>16. Union Types ( | )</h2>
+                    </div>
+                    <p><strong>Concept:</strong> "অথবা" (OR) লজিক। ভেরিয়েবলের মান একাধিক টাইপের হতে পারে।</p>
+                    <div class="code-container">
+                        <button class="copy-btn">Copy</button>
+<pre><code>let userId: string | number;
+userId = 101; // OK
+userId = "U-505"; // OK
+
+function showId(id: string | number) {
+    if (typeof id === "string") {
+        console.log(id.toUpperCase());
+    } else {
+        console.log(id.toFixed());
+    }
 }
-
-<span class="kwd">const</span> myUser: <span class="typ">User</span> = {
-  firstName: <span class="str">"Sakib"</span>,
-  lastName: <span class="str">"Al Hasan"</span>,
-  age: <span class="num">34</span>,
-  
-  <span class="fun">getFullName</span>() {
-    <span class="kwd">return</span> <span class="str">`${this.firstName} ${this.lastName}`</span>;
-  },
-  
-  <span class="fun">updateAge</span>(newAge: <span class="typ">number</span>) {
-    <span class="kwd">this</span>.age = newAge;
-  }
-};</code></pre>
-                </div>
-            </section>
-
-            <!-- Rest vs Spread -->
-            <section id="rest-spread" class="topic-section">
-                <h2>Rest vs Spread Operator (...)</h2>
-                <p>দুটির মধ্যে পার্থক্য হলো: Rest মানে "একত্রিত করা" (Pack) এবং Spread মানে "ছড়িয়ে দেওয়া" (Unpack)।</p>
-
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="lang-tag">TypeScript</span>
-                        <button class="copy-btn">Copy</button>
+</code></pre>
                     </div>
-                    <pre><code><span class="com">// --- A. Rest Operator (Pack) ---</span>
-<span class="com">// ফাংশনে অনির্দিষ্ট সংখ্যক ইনপুট নেওয়া</span>
-<span class="kwd">function</span> <span class="fun">sumAll</span>(...numbers: <span class="typ">number</span>[]): <span class="typ">void</span> {
-  <span class="kwd">const</span> total = numbers.<span class="fun">reduce</span>((acc, num) => acc + num, <span class="num">0</span>);
-  <span class="kwd">console</span>.log(<span class="str">"Total:"</span>, total);
+                </section>
+
+                <section id="topic-17" data-category="E. INTERFACES & TYPES">
+                    <div class="topic-header">
+                        <h2>17. Intersection Types ( & )</h2>
+                    </div>
+                    <p><strong>Concept:</strong> "এবং" (AND) লজিক। দুটি টাইপকে জোড়া লাগিয়ে নতুন শক্তিশালী টাইপ তৈরি।</p>
+                    <div class="code-container">
+                        <button class="copy-btn">Copy</button>
+<pre><code>type FrontendDev = { skills: string[] };
+type BackendDev = { database: string };
+
+type FullStackDev = FrontendDev & BackendDev;
+
+const dev: FullStackDev = {
+    skills: ["React"],
+    database: "MongoDB"
+};
+</code></pre>
+                    </div>
+                </section>
+
+                <!-- F. MODERN FEATURES -->
+                <section id="topic-18" data-category="F. MODERN TYPESCRIPT FEATURES">
+                    <div class="topic-header">
+                        <h2>18. Modern Operators</h2>
+                    </div>
+                    <ul>
+                        <li><strong>Ternary (? :):</strong> if-else এর শর্টকাট।</li>
+                        <li><strong>Nullish Coalescing (??):</strong> null বা undefined হলে ডিফল্ট ভ্যালু দেয়।</li>
+                        <li><strong>Optional Chaining (?.):</strong> নেস্টেড অবজেক্ট এক্সেস করার সময় নিরাপত্তা।</li>
+                    </ul>
+                    <div class="code-container">
+                        <button class="copy-btn">Copy</button>
+<pre><code>// Ternary
+const type = age >= 18 ? "Adult" : "Child";
+
+// Nullish Coalescing (??) vs OR (||)
+// ?? শুধুমাত্র null/undefined চেক করে, 0 বা "" কে সত্য বলে ধরে।
+const val = testNumber ?? 10;
+
+// Optional Chaining
+console.log(user.address?.city);
+</code></pre>
+                    </div>
+                </section>
+
+                <section id="topic-19" data-category="F. MODERN TYPESCRIPT FEATURES">
+                    <div class="topic-header">
+                        <h2>19. Nullable Types</h2>
+                    </div>
+                    <p>Strict Mode-এ কোনো ভেরিয়েবল <code>null</code> রাখা যায় না, যদি না আমরা Union টাইপ ব্যবহার করি।</p>
+                    <div class="code-container">
+                        <button class="copy-btn">Copy</button>
+<pre><code>let searchName: string | null;
+searchName = null; // Valid
+</code></pre>
+                    </div>
+                </section>
+
+                <section id="topic-20" data-category="F. MODERN TYPESCRIPT FEATURES">
+                    <div class="topic-header">
+                        <h2>20. Unknown vs Any</h2>
+                    </div>
+                    <ul>
+                        <li><code>any</code>: টাইপ চেকিং বন্ধ করে দেয়। (ঝুঁকিপূর্ণ)</li>
+                        <li><code>unknown</code>: টাইপ চেক না করা পর্যন্ত ব্যবহার করতে দেয় না। (নিরাপদ)</li>
+                    </ul>
+                    <div class="box mistake-box">
+                        <strong>Common Mistake</strong>
+                        <code>any</code> ব্যবহার করলে টাইপ সুরক্ষা চলে যায়। সম্ভব হলে <code>unknown</code> ব্যবহার করুন এবং <code>typeof</code> দিয়ে চেক করুন।
+                    </div>
+                </section>
+
+                <section id="topic-21" data-category="F. MODERN TYPESCRIPT FEATURES">
+                    <div class="topic-header">
+                        <h2>21. Never Type</h2>
+                    </div>
+                    <p><code>never</code> টাইপ এমন ভ্যালুকে নির্দেশ করে যা কখনো ঘটে না (যেমন: এরর থ্রো করা বা ইনফিনিটি লুপ)।</p>
+                    <div class="code-container">
+                        <button class="copy-btn">Copy</button>
+<pre><code>function throwError(message: string): never {
+    throw new Error(message);
 }
-
-<span class="fun">sumAll</span>(<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>);
-
-<span class="com">// --- B. Spread Operator (Unpack) ---</span>
-<span class="com">// অ্যারে কপি বা মার্জ করা</span>
-<span class="kwd">const</span> teamA = [<span class="str">"Rahim"</span>, <span class="str">"Karim"</span>];
-<span class="kwd">const</span> teamB = [<span class="str">"Jabbar"</span>, <span class="str">"Salam"</span>];
-
-<span class="kwd">const</span> fullTeam = [...teamA, ...teamB, <span class="str">"Barkat"</span>];</code></pre>
-                </div>
-            </section>
-
-            <!-- Destructuring -->
-            <section id="destructuring" class="topic-section">
-                <h2>Destructuring</h2>
-                <p>অ্যারে বা অবজেক্ট থেকে ভ্যালু আলাদা আলাদা ভেরিয়েবলে রাখার প্রক্রিয়া।</p>
-                
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="lang-tag">TypeScript</span>
-                        <button class="copy-btn">Copy</button>
+</code></pre>
                     </div>
-                    <pre><code><span class="com">// 1. Object Destructuring</span>
-<span class="kwd">const</span> user = {
-  id: <span class="num">101</span>,
-  fullName: <span class="str">"Mehedi Hasan"</span>,
-  age: <span class="num">25</span>
+                </section>
+
+                <section id="topic-22" data-category="F. MODERN TYPESCRIPT FEATURES">
+                    <div class="topic-header">
+                        <h2>22. Type Assertion</h2>
+                    </div>
+                    <p>কম্পাইলারকে জোর করে বলা যে ভেরিয়েবলটির টাইপ কী।</p>
+                    <div class="code-container">
+                        <button class="copy-btn">Copy</button>
+<pre><code>// as syntax (Recommended)
+let someValue: unknown = "Hello";
+let strLength: number = (someValue as string).length;
+
+// DOM Assertion
+const input = document.getElementById("input") as HTMLInputElement;
+console.log(input.value);
+</code></pre>
+                    </div>
+                </section>
+
+                <section id="topic-23" data-category="F. MODERN TYPESCRIPT FEATURES">
+                    <div class="topic-header">
+                        <h2>23. Destructuring</h2>
+                    </div>
+                    <p>অ্যারে বা অবজেক্ট থেকে ভ্যালু আলাদা আলাদা ভেরিয়েবলে রাখা।</p>
+                    <div class="code-container">
+                        <button class="copy-btn">Copy</button>
+<pre><code>// Array Destructuring
+const numbers = [1, 2, 3];
+const [first, second] = numbers;
+
+// Object Destructuring
+const user = { name: "Rahim", age: 25 };
+const { name, age } = user;
+
+// Renaming
+const { name: myName } = user;
+</code></pre>
+                    </div>
+                </section>
+
+                <section id="topic-24" data-category="F. MODERN TYPESCRIPT FEATURES">
+                    <div class="topic-header">
+                        <h2>24. Rest vs Spread Operator</h2>
+                    </div>
+                    <ul>
+                        <li><strong>Rest (...):</strong> অনেকগুলো ভ্যালুকে একটি অ্যারেতে প্যাক করা।</li>
+                        <li><strong>Spread (...):</strong> অ্যারে বা অবজেক্টকে ছড়িয়ে দেওয়া (Unpack)।</li>
+                    </ul>
+                    <div class="code-container">
+                        <button class="copy-btn">Copy</button>
+<pre><code>// Rest
+function sumAll(...nums: number[]) { }
+
+// Spread (Merge objects)
+const newObj = { ...oldObj, newProp: true };
+</code></pre>
+                    </div>
+                </section>
+
+                <!-- G. GENERICS -->
+                <section id="topic-25" data-category="G. GENERICS">
+                    <div class="topic-header">
+                        <h2>25. Generics with Type Alias</h2>
+                    </div>
+                    <p>টাইপ এলিয়াস ব্যবহার করে ডাইনামিক বা ভেরিয়েবল টাইপ তৈরি করা।</p>
+                    <div class="code-container">
+                        <button class="copy-btn">Copy</button>
+<pre><code>type Box<T> = {
+    content: T;
 };
 
-<span class="kwd">const</span> { fullName, age } = user;
+const stringBox: Box<string> = { content: "Hello" };
+const numberBox: Box<number> = { content: 100 };
 
-<span class="com">// 2. Array Destructuring</span>
-<span class="kwd">const</span> colors: <span class="typ">string</span>[] = [<span class="str">"Red"</span>, <span class="str">"Green"</span>, <span class="str">"Blue"</span>];
-<span class="kwd">const</span> [color1, , color3] = colors; <span class="com">// Green স্কিপ করা হয়েছে</span></code></pre>
-                </div>
-            </section>
-
-            <!-- Type Alias -->
-            <section id="type-alias" class="topic-section">
-                <h2>Type Alias</h2>
-                <p>টাইপ অ্যালিয়াস হলো কোনো টাইপের একটি কাস্টম নাম বা ডাকনাম দেওয়া।</p>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="lang-tag">TypeScript</span>
-                        <button class="copy-btn">Copy</button>
+// Utility Pattern
+type Maybe<T> = T | null;
+</code></pre>
                     </div>
-                    <pre><code><span class="com">// 1. Object Type Alias</span>
-<span class="kwd">type</span> <span class="typ">Student</span> = {
-  id: <span class="typ">number</span>;
-  name: <span class="typ">string</span>;
-};
+                </section>
 
-<span class="kwd">const</span> student1: <span class="typ">Student</span> = {
-  id: <span class="num">101</span>,
-  name: <span class="str">"Rahim"</span>
-};
-
-<span class="com">// 2. Union Type Alias</span>
-<span class="kwd">type</span> <span class="typ">ID</span> = <span class="typ">number</span> | <span class="typ">string</span>;
-
-<span class="kwd">let</span> userId: <span class="typ">ID</span>;
-userId = <span class="num">101</span>;      <span class="com">// Valid</span>
-userId = <span class="str">"U-101"</span>; <span class="com">// Valid</span></code></pre>
-                </div>
-            </section>
-
-            <!-- Union vs Intersection -->
-            <section id="union-intersection" class="topic-section">
-                <h2>Union vs Intersection Types</h2>
-                <ul>
-                    <li><strong>Union (|):</strong> অথবা (OR)। "হয় এটা হবে, না হয় ওটা হবে"।</li>
-                    <li><strong>Intersection (&):</strong> এবং (AND)। "দুটোই একসাথে লাগবে"।</li>
-                </ul>
-
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="lang-tag">TypeScript</span>
-                        <button class="copy-btn">Copy</button>
+                <section id="topic-26" data-category="G. GENERICS">
+                    <div class="topic-header">
+                        <h2>26. Generics with Interface & Function</h2>
                     </div>
-                    <pre><code><span class="com">// Union Type</span>
-<span class="kwd">let</span> userId: <span class="typ">string</span> | <span class="typ">number</span>;
-userId = <span class="str">"U-505"</span>;
-
-<span class="com">// Intersection Type</span>
-<span class="kwd">type</span> <span class="typ">FrontendDev</span> = { skills: <span class="typ">string</span>[] };
-<span class="kwd">type</span> <span class="typ">BackendDev</span> = { database: <span class="typ">string</span> };
-
-<span class="com">// FullStackDev এর মধ্যে Frontend ও Backend দুটোর প্রপার্টিই থাকতে হবে</span>
-<span class="kwd">type</span> <span class="typ">FullStackDev</span> = <span class="typ">FrontendDev</span> & <span class="typ">BackendDev</span>;</code></pre>
-                </div>
-            </section>
-
-            <!-- Modern Operators -->
-            <section id="modern-operators" class="topic-section">
-                <h2>Modern Operators</h2>
-                <h3>1. Ternary Operator (? :)</h3>
-                <p>if-else এর এক লাইনের শর্টকাট।</p>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="lang-tag">TypeScript</span>
+                    <p>ইন্টারফেস এবং ফাংশনে জেনেরিক্স ব্যবহার করে রি-ইউজেবল কোড লেখা।</p>
+                    <div class="code-container">
                         <button class="copy-btn">Copy</button>
-                    </div>
-                    <pre><code><span class="kwd">const</span> age = <span class="num">20</span>;
-<span class="kwd">const</span> type: <span class="typ">string</span> = age >= <span class="num">18</span> ? <span class="str">"Adult"</span> : <span class="str">"Child"</span>;</code></pre>
-                </div>
-
-                <h3>2. Nullish Coalescing (??)</h3>
-                <p>ভ্যালু <code>null</code> বা <code>undefined</code> হলে ডিফল্ট ভ্যালু সেট করে। <code>||</code> এর মতো নয়, এটি <code>0</code> বা <code>""</code> কে ফলস বলে না।</p>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="lang-tag">TypeScript</span>
-                        <button class="copy-btn">Copy</button>
-                    </div>
-                    <pre><code><span class="kwd">const</span> isAuthenticated = <span class="kwd">null</span>;
-<span class="kwd">const</span> userName = isAuthenticated ?? <span class="str">"Guest"</span>; <span class="com">// "Guest"</span>
-
-<span class="kwd">const</span> testNumber = <span class="num">0</span>;
-<span class="kwd">const</span> result = testNumber ?? <span class="num">10</span>; <span class="com">// 0 (কারণ 0 ফলস নয়)</span></code></pre>
-                </div>
-
-                <h3>3. Optional Chaining (?.)</h3>
-                <p>নেস্টেড অবজেক্ট এক্সেস করার সময় ভুল হলে ক্র্যাশ না করে <code>undefined</code> রিটার্ন করে।</p>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="lang-tag">TypeScript</span>
-                        <button class="copy-btn">Copy</button>
-                    </div>
-                    <pre><code><span class="kwd">const</span> roadName = user.address?.road ?? <span class="str">"No Road"</span>;</code></pre>
-                </div>
-            </section>
-
-            <!-- Nullable / Unknown / Never -->
-            <section id="nullable-unknown" class="topic-section">
-                <h2>Nullable, Unknown & Never</h2>
-                
-                <h3>Nullable Types</h3>
-                <p>ভেরিয়েবল <code>null</code> বা <code>undefined</code> রাখতে পারে কিনা তা নির্দিষ্ট করা।</p>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="lang-tag">TypeScript</span>
-                        <button class="copy-btn">Copy</button>
-                    </div>
-                    <pre><code><span class="kwd">let</span> myName: <span class="typ">string</span> | <span class="kwd">null</span>;
-myName = <span class="kwd">null</span>; <span class="com">// Valid</span></code></pre>
-                </div>
-
-                <h3>Unknown Type</h3>
-                <p><code>any</code> এর মতোই, কিন্তু নিরাপদ। ব্যবহার করার আগে টাইপ চেক করতে হয়।</p>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="lang-tag">TypeScript</span>
-                        <button class="copy-btn">Copy</button>
-                    </div>
-                    <pre><code><span class="kwd">let</span> guestInput: <span class="typ">unknown</span>;
-guestInput = <span class="str">"Hello"</span>;
-
-<span class="kwd">if</span> (<span class="kwd">typeof</span> guestInput === <span class="str">"string"</span>) {
-  <span class="kwd">console</span>.log(guestInput.toUpperCase()); <span class="com">// Safe to use</span>
-}</code></pre>
-                </div>
-            </section>
-
-            <!-- Type Assertion -->
-            <section id="type-assertion" class="topic-section">
-                <h2>Type Assertion</h2>
-                <p>কম্পাইলারকে জোর করে বলা যে ভেরিয়েবলটির টাইপ কী।</p>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="lang-tag">TypeScript</span>
-                        <button class="copy-btn">Copy</button>
-                    </div>
-                    <pre><code><span class="kwd">let</span> someValue: <span class="typ">unknown</span> = <span class="str">"This is a string"</span>;
-
-<span class="com">// 'as' Syntax (Recommended)</span>
-<span class="kwd">let</span> strLength: <span class="typ">number</span> = (someValue <span class="kwd">as</span> <span class="typ">string</span>).length;
-
-<span class="com">// DOM Manipulation</span>
-<span class="kwd">const</span> myInput = document.<span class="fun">getElementById</span>(<span class="str">"user-input"</span>) <span class="kwd">as</span> <span class="typ">HTMLInputElement</span>;
-<span class="kwd">console</span>.log(myInput.value);</code></pre>
-                </div>
-            </section>
-
-            <!-- Interface -->
-            <section id="interface" class="topic-section">
-                <h2>Interface (ইন্টারফেস)</h2>
-                <p>ইন্টারফেস হলো অবজেক্টের স্ট্রাকচার বা চুক্তি (Contract) ডিফাইন করার জন্য ব্যবহৃত হয়।</p>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="lang-tag">TypeScript</span>
-                        <button class="copy-btn">Copy</button>
-                    </div>
-                    <pre><code><span class="kwd">interface</span> <span class="typ">User</span> {
-  <span class="kwd">readonly</span> id: <span class="typ">number</span>; <span class="com">// পরিবর্তনযোগ্য নয়</span>
-  name: <span class="typ">string</span>;
-  age?: <span class="typ">number</span>; <span class="com">// Optional</span>
+<pre><code>// Generic Interface
+interface ApiResponse<T> {
+    status: number;
+    data: T;
 }
 
-<span class="com">// Extending Interface (Inheritance)</span>
-<span class="kwd">interface</span> <span class="typ">Employee</span> <span class="kwd">extends</span> <span class="typ">User</span> {
-  salary: <span class="typ">number</span>;
-  position: <span class="typ">string</span>;
-}</code></pre>
-                </div>
-            </section>
+const res: ApiResponse<User> = { status: 200, data: userObj };
 
-            <!-- Generics Alias -->
-            <section id="generics-alias" class="topic-section">
-                <h2>Generics: Type Alias</h2>
-                <p>টাইপ অ্যালিয়াসকে ডায়নামিক বা রিইউজেবল করার জন্য জেনেরিক্স ব্যবহার করা হয়।</p>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="lang-tag">TypeScript</span>
-                        <button class="copy-btn">Copy</button>
-                    </div>
-                    <pre><code><span class="com">// T হলো একটি প্লেসহোল্ডার</span>
-<span class="kwd">type</span> <span class="typ">Box</span>&lt;<span class="typ">T</span>&gt; = {
-  content: <span class="typ">T</span>;
-};
-
-<span class="kwd">const</span> stringBox: <span class="typ">Box</span>&lt;<span class="typ">string</span>&gt; = { content: <span class="str">"চিঠি"</span> };
-<span class="kwd">const</span> numberBox: <span class="typ">Box</span>&lt;<span class="typ">number</span>&gt; = { content: <span class="num">500</span> };
-
-<span class="com">// Utility Type Example</span>
-<span class="kwd">type</span> <span class="typ">Maybe</span>&lt;<span class="typ">T</span>&gt; = <span class="typ">T</span> | <span class="kwd">null</span>;</code></pre>
-                </div>
-            </section>
-
-            <!-- Generics Interface -->
-            <section id="generics-interface" class="topic-section">
-                <h2>Generics: Interface</h2>
-                <p>API রেসপন্স হ্যান্ডেল করার জন্য এটি খুবই কার্যকর।</p>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="lang-tag">TypeScript</span>
-                        <button class="copy-btn">Copy</button>
-                    </div>
-                    <pre><code><span class="kwd">interface</span> <span class="typ">ApiResponse</span>&lt;<span class="typ">T</span>&gt; {
-  status: <span class="typ">number</span>;
-  message: <span class="typ">string</span>;
-  data: <span class="typ">T</span>; <span class="com">// ডেটা টাইপ ডায়নামিক</span>
+// Generic Function
+function identity<T>(arg: T): T {
+    return arg;
 }
 
-<span class="kwd">interface</span> <span class="typ">User</span> {
-  name: <span class="typ">string</span>;
-  age: <span class="typ">number</span>;
+// Generic Constraints (extends)
+interface Lengthwise {
+    length: number;
 }
-
-<span class="com">// User ডেটার জন্য</span>
-<span class="kwd">const</span> userResponse: <span class="typ">ApiResponse</span>&lt;<span class="typ">User</span>&gt; = {
-  status: <span class="num">200</span>,
-  message: <span class="str">"User found"</span>,
-  data: { name: <span class="str">"Fahim"</span>, age: <span class="num">28</span> }
-};</code></pre>
-                </div>
-            </section>
-
-            <!-- Generics Function -->
-            <section id="generics-function" class="topic-section">
-                <h2>Generics in Function</h2>
-                <p>ফাংশন যেন যেকোনো টাইপের ইনপুট নিতে পারে এবং সেই অনুযায়ী আউটপুট দিতে পারে।</p>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="lang-tag">TypeScript</span>
-                        <button class="copy-btn">Copy</button>
+function loggingIdentity<T extends Lengthwise>(arg: T): T {
+    console.log(arg.length); // এখন .length এক্সেস করা নিরাপদ
+    return arg;
+}
+</code></pre>
                     </div>
-                    <pre><code><span class="com">// Basic Generic Function</span>
-<span class="kwd">function</span> <span class="fun">showData</span>&lt;<span class="typ">T</span>&gt;(data: <span class="typ">T</span>): <span class="typ">T</span> {
-  <span class="kwd">return</span> data;
-}
+                    <div class="box note-box">
+                        <strong>Interview Note 💡</strong>
+                        জেনেরিক্স ব্যবহার করলে কম্পোনেন্ট বা ফাংশন যেকোনো ডাটা টাইপ হ্যান্ডেল করতে পারে, কিন্তু টাইপ সেফটি বজায় থাকে।
+                    </div>
+                </section>
 
-<span class="com">// Array Generic Function</span>
-<span class="kwd">const</span> <span class="fun">getFirstItem</span> = &lt;<span class="typ">T</span>&gt;(arr: <span class="typ">T</span>[]): <span class="typ">T</span> => {
-  <span class="kwd">return</span> arr[<span class="num">0</span>];
-};
-
-<span class="kwd">const</span> firstNum = <span class="fun">getFirstItem</span>([<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>]); <span class="com">// Type: number</span></code></pre>
-                </div>
-            </section>
-
+            </div>
+            
+            <footer style="margin-top: 5rem; text-align: center; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 2rem;">
+                <p>Made with ❤️ for TypeScript Learners</p>
+            </footer>
         </main>
     </div>
 
-    <!-- JavaScript Implementation -->
     <script>
-        // DOM Elements
-        const sidebar = document.getElementById('sidebar');
-        const menuBtn = document.getElementById('menuBtn');
-        const overlay = document.getElementById('overlay');
-        const searchInput = document.getElementById('searchInput');
-        const navLinks = document.querySelectorAll('.nav-link');
-        const sections = document.querySelectorAll('.topic-section');
-        const copyButtons = document.querySelectorAll('.copy-btn');
-        
-        // Theme Buttons
-        const themeToggleSidebar = document.getElementById('themeToggleSidebar');
-        const themeToggleMobile = document.getElementById('themeToggleMobile');
-
-        // Icons (SVG Strings)
-        const sunIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
-        const moonIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
-
-        // Theme Logic
-        function applyTheme(isDark) {
-            if (isDark) {
-                document.body.classList.remove('light-theme');
-                themeToggleSidebar.innerHTML = moonIcon;
-                themeToggleMobile.innerHTML = moonIcon;
-            } else {
-                document.body.classList.add('light-theme');
-                themeToggleSidebar.innerHTML = sunIcon;
-                themeToggleMobile.innerHTML = sunIcon;
-            }
-        }
+        // --- 1. THEME TOGGLING ---
+        const themeBtn = document.getElementById('theme-btn');
+        const sidebarThemeBtn = document.getElementById('sidebar-theme-btn');
+        const body = document.body;
 
         function toggleTheme() {
-            const isLight = document.body.classList.contains('light-theme');
-            applyTheme(isLight); // If light, make dark. If dark, make light.
-            // Save to localStorage
-            localStorage.setItem('theme', isLight ? 'dark' : 'light');
+            const isDark = body.getAttribute('data-theme') !== 'light';
+            const newTheme = isDark ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('ts-guide-theme', newTheme);
+            updateIcons(newTheme);
         }
 
-        // Initialize Theme
-        const savedTheme = localStorage.getItem('theme');
-        // Default to dark (true) if null
-        const prefersDark = savedTheme === null ? true : savedTheme !== 'light';
-        applyTheme(prefersDark);
+        function updateIcons(theme) {
+            const icon = theme === 'dark' ? '🌙' : '☀️';
+            if(themeBtn) themeBtn.textContent = icon;
+            if(sidebarThemeBtn) sidebarThemeBtn.textContent = icon;
+        }
 
-        themeToggleSidebar.addEventListener('click', toggleTheme);
-        themeToggleMobile.addEventListener('click', toggleTheme);
+        // Init Theme
+        const savedTheme = localStorage.getItem('ts-guide-theme') || 'dark';
+        body.setAttribute('data-theme', savedTheme);
+        updateIcons(savedTheme);
 
-        // Mobile Menu Toggle
-        function toggleMenu() {
+        if(themeBtn) themeBtn.addEventListener('click', toggleTheme);
+        if(sidebarThemeBtn) sidebarThemeBtn.addEventListener('click', toggleTheme);
+
+
+        // --- 2. AUTO-GENERATED TOC ---
+        const tocNav = document.getElementById('toc-nav');
+        const sections = document.querySelectorAll('section');
+        const categories = {};
+
+        sections.forEach(section => {
+            const id = section.id;
+            const title = section.querySelector('h2').innerText;
+            const category = section.getAttribute('data-category');
+
+            if (!categories[category]) {
+                categories[category] = [];
+            }
+            categories[category].push({ id, title });
+        });
+
+        // Render TOC
+        let html = '';
+        for (const [cat, items] of Object.entries(categories)) {
+            html += `<div class="toc-category">${cat}</div><ul>`;
+            items.forEach(item => {
+                html += `<li><a href="#${item.id}" class="toc-link">${item.title}</a></li>`;
+            });
+            html += `</ul>`;
+        }
+        tocNav.innerHTML = html;
+
+
+        // --- 3. MOBILE MENU ---
+        const menuBtn = document.getElementById('menu-btn');
+        const sidebar = document.getElementById('sidebar');
+
+        menuBtn.addEventListener('click', () => {
             sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
-        }
+        });
 
-        menuBtn.addEventListener('click', toggleMenu);
-        overlay.addEventListener('click', toggleMenu);
-
-        // Search Functionality
-        searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-
-            // 1. Filter Sidebar Links
-            navLinks.forEach(link => {
-                const text = link.textContent.toLowerCase();
-                if (text.includes(query)) {
-                    link.parentElement.style.display = 'block';
-                } else {
-                    link.parentElement.style.display = 'none';
+        // Close sidebar when clicking a link on mobile
+        document.querySelectorAll('.toc-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if(window.innerWidth <= 768) {
+                    sidebar.classList.remove('active');
                 }
             });
+        });
 
-            // 2. Filter Content Sections
-            sections.forEach(section => {
-                const title = section.querySelector('h2') ? section.querySelector('h2').textContent.toLowerCase() : '';
-                const content = section.textContent.toLowerCase();
-                
-                // Search in both title and content body
-                if (title.includes(query) || content.includes(query)) {
+
+        // --- 4. SYNTAX HIGHLIGHTER (Simple Regex Based) ---
+        function highlightCode() {
+            const pres = document.querySelectorAll('pre code');
+            const keywords = /\b(function|return|var|let|const|if|else|for|while|class|extends|interface|type|import|export|from|new|this|super|async|await|try|catch|throw|abstract|private|public|protected)\b/g;
+            const types = /\b(string|number|boolean|any|void|never|unknown|null|undefined|object|symbol|bigint)\b/g;
+            
+            pres.forEach(pre => {
+                let html = pre.innerHTML
+                    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") // Escape HTML
+                    .replace(/(\/\/.*$)/gm, '<span class="syntax-comment">$1</span>') // Comments
+                    .replace(/(".*?"|'.*?'|`.*?`)/g, '<span class="syntax-string">$1</span>') // Strings
+                    .replace(keywords, '<span class="syntax-keyword">$1</span>') // Keywords
+                    .replace(types, '<span class="syntax-type">$1</span>') // Types
+                    .replace(/\b(\d+)\b/g, '<span class="syntax-number">$1</span>'); // Numbers
+
+                pre.innerHTML = html;
+            });
+        }
+        highlightCode();
+
+
+        // --- 5. COPY TO CLIPBOARD ---
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const code = btn.nextElementSibling.innerText;
+                navigator.clipboard.writeText(code).then(() => {
+                    btn.textContent = 'Copied!';
+                    setTimeout(() => btn.textContent = 'Copy', 2000);
+                });
+            });
+        });
+
+
+        // --- 6. ADVANCED SEARCH ---
+        const searchInput = document.getElementById('search-input');
+        
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase().trim();
+            const allSections = document.querySelectorAll('section');
+            
+            // Clear previous highlights
+            document.querySelectorAll('mark').forEach(mark => {
+                const parent = mark.parentNode;
+                parent.replaceChild(document.createTextNode(mark.textContent), mark);
+                parent.normalize(); // Merge text nodes
+            });
+
+            if (term === '') {
+                allSections.forEach(sec => {
+                    sec.style.display = 'block';
+                    // Remove hidden state
+                });
+                return;
+            }
+
+            allSections.forEach(section => {
+                const text = section.innerText.toLowerCase();
+                if (text.includes(term)) {
                     section.style.display = 'block';
+                    // Highlight text inside this section (Simple implementation)
+                    highlightInSection(section, term);
                 } else {
                     section.style.display = 'none';
                 }
             });
         });
 
-        // Copy to Clipboard Functionality
-        copyButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const codeBlock = btn.parentElement.nextElementSibling.querySelector('code');
-                const codeText = codeBlock.innerText;
+        function highlightInSection(section, term) {
+            // A very basic text walker for highlighting inside visible elements
+            // Ideally, we should target specific tags like p, h2, li
+            const walk = document.createTreeWalker(
+                section,
+                NodeFilter.SHOW_TEXT,
+                null,
+                false
+            );
 
-                navigator.clipboard.writeText(codeText).then(() => {
-                    const originalText = btn.textContent;
-                    btn.textContent = 'Copied!';
-                    btn.style.color = '#4ec9b0'; // Greenish color for success
-                    
-                    setTimeout(() => {
-                        btn.textContent = originalText;
-                        btn.style.color = '';
-                    }, 2000);
-                }).catch(err => {
-                    console.error('Failed to copy text: ', err);
-                });
+            const nodesToReplace = [];
+            let node;
+
+            while(node = walk.nextNode()) {
+                if (node.nodeValue.toLowerCase().includes(term) && node.parentElement.tagName !== 'SCRIPT' && node.parentElement.tagName !== 'STYLE' && node.parentElement.tagName !== 'CODE') {
+                    nodesToReplace.push(node);
+                }
+            }
+
+            nodesToReplace.forEach(node => {
+                const span = document.createElement('span');
+                span.innerHTML = node.nodeValue.replace(new RegExp(`(${term})`, 'gi'), '<mark>$1</mark>');
+                node.parentNode.replaceChild(span, node);
             });
-        });
+        }
 
-        // Smooth Scroll active state update (Optional UX improvement)
+        // --- 7. ACTIVE SCROLL SPY ---
         window.addEventListener('scroll', () => {
             let current = '';
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
-                if (scrollY >= sectionTop - 100) {
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - 200)) {
                     current = section.getAttribute('id');
                 }
             });
 
-            navLinks.forEach(link => {
+            document.querySelectorAll('.toc-link').forEach(link => {
                 link.classList.remove('active');
                 if (link.getAttribute('href').includes(current)) {
                     link.classList.add('active');
